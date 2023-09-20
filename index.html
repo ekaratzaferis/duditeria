@@ -209,10 +209,14 @@
     </script>
 
     <img id="animatedImage" src="img/627857.png" alt="Animated Image" style="width: 50px; height: 50px; position: fixed; z-index: 999999999;">
+    <div id="counter" style="z-index: 9999999999999; position: fixed; color: red; font-weight: bold;"></div>
     <script>
+        window.counter = 0;
         const image = document.getElementById('animatedImage');
+        const counter = document.getElementById('counter');
         image.addEventListener("click", () => {
-            alert('AAAAAA');
+            window.counter++;
+            counter.innerHTML = window.counter;
         });
 
         function getRandomPosition() {
@@ -243,6 +247,9 @@
             image.style.left = startPosition.x + 'px';
             image.style.top = startPosition.y + 'px';
             image.style.display = 'block';
+            counter.style.left = (startPosition.x + 20) + 'px';
+            counter.style.top = (startPosition.y + 20) + 'px';
+            counter.style.display = 'block';
 
             let startTime = null;
 
@@ -255,9 +262,11 @@
                 if (progress < 1) {
                     const { x, y } = trajectory(progress);
                     image.style.transform = `translate(${x + endPosition.x}px, ${y + endPosition.y}px)`;
+                    counter.style.transform = `translate(${x + endPosition.x}px, ${y + endPosition.y}px)`;
                     requestAnimationFrame(step);
                 } else {
                     image.style.display = 'none';
+                    counter.style.display = 'none';
                     setTimeout(animateImage, (Math.random() * 3000) + 3000); // Wait for a random interval before starting again
                 }
             }
