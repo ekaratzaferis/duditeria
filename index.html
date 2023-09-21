@@ -255,7 +255,7 @@
                 const startPosition = { x: -50, y: -50 };
                 const endPosition = getRandomPosition();
                 const trajectory = getRandomTrajectory();
-                const duration = 4000; // 2 seconds
+                const duration = 2500; // 2 seconds
     
                 image.style.left = startPosition.x + 'px';
                 image.style.top = startPosition.y + 'px';
@@ -275,7 +275,7 @@
                         requestAnimationFrame(step);
                     } else {
                         image.style.display = 'none';
-                        setTimeout(animateImage, (Math.random() * 3000) + 3000); // Wait for a random interval before starting again
+                        setTimeout(animateImage, (Math.random() * 3000) + 7000); // Wait for a random interval before starting again
                     }
                 }
     
@@ -284,7 +284,7 @@
     
             setTimeout(animateImage, timeout);
         }
-        penguin(3000);
+        penguin(7000);
     </script>
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
