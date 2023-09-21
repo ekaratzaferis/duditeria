@@ -209,74 +209,82 @@
     </script>
 
     <img id="animatedImage" src="img/627857.png" alt="Animated Image" style="width: 50px; height: 50px; position: fixed; z-index: 999999999;">
-    <div id="counter" style="z-index: 9999999999999; position: fixed; color: red; font-weight: bold;"></div>
     <script>
-        window.counter = 0;
-        const image = document.getElementById('animatedImage');
-        const counter = document.getElementById('counter');
-        image.addEventListener("click", () => {
-            window.counter++;
-            counter.innerHTML = window.counter;
-        });
-
-        function getRandomPosition() {
-            const x = Math.random() * (window.innerWidth - 150);
-            const y = Math.random() * (window.innerHeight - 150);
-            return { x, y };
-        }
-
-        function getRandomTrajectory() {
-            const amplitudeX = Math.random() * (window.screen.availWidth / 2) - 50;
-            const amplitudeY = Math.random() * (window.screen.availWidth / 2) - 50;
-            const frequency = Math.random() * 2.5 + 2.5;
-            const phaseX = Math.random() * 5 * Math.PI;
-            const phaseY = Math.random() * 5 * Math.PI;
-            
-            return (t) => ({
-                x: amplitudeX * Math.sin(frequency * t + phaseX),
-                y: amplitudeY * Math.cos(frequency * t + phaseY),
-            });
-        }
-
-        async function animateImage() {
-            const startPosition = { x: -50, y: -50 };
-            const endPosition = getRandomPosition();
-            const trajectory = getRandomTrajectory();
-            const duration = 1500; // 2 seconds
-
-            image.style.left = startPosition.x + 'px';
-            image.style.top = startPosition.y + 'px';
-            image.style.display = 'block';
-            counter.style.left = (startPosition.x + 20) + 'px';
-            counter.style.top = (startPosition.y + 20) + 'px';
-            counter.style.display = 'block';
-
-            let startTime = null;
-
-            async function step(timestamp) {
-                if (!startTime) {
-                    startTime = timestamp;
-                }
-                const progress = (timestamp - startTime) / duration;
-
-                if (progress < 1) {
-                    const { x, y } = trajectory(progress);
-                    image.style.transform = `translate(${x + endPosition.x}px, ${y + endPosition.y}px)`;
-                    counter.style.transform = `translate(${x + endPosition.x}px, ${y + endPosition.y}px)`;
-                    requestAnimationFrame(step);
-                } else {
-                    image.style.display = 'none';
-                    counter.style.display = 'none';
-                    setTimeout(animateImage, (Math.random() * 3000) + 3000); // Wait for a random interval before starting again
-                }
-            }
-
-            requestAnimationFrame(step);
-        }
-
-        setTimeout(animateImage, 3000);
+        window.penguinCounter = 0;
+        const placeholderPenguin = document.getElementById('animatedImage');
         
-        // setInterval(animateImage, 3000);
+        function penguin(timeout, c = '') {
+            const image = document.getElementById('animatedImage' + c);
+            image.style.display = 'none';
+
+            image.addEventListener("click", () => {
+                window.penguinCounter++;
+
+                // add new penguin //
+                const clone = placeholderPenguin.cloneNode();
+                clone.id = clone.id + window.penguinCounter;
+                document.body.append(clone);
+
+                penguin(0, window.penguinCounter);
+
+                if (window.penguinCounter > 50) {
+                    window.open('https://www.youtube.com/watch?v=nm69G0IYHsM', '_blank');
+                }
+            });
+    
+            function getRandomPosition() {
+                const x = Math.random() * (window.innerWidth - 150);
+                const y = Math.random() * (window.innerHeight - 150);
+                return { x, y };
+            }
+    
+            function getRandomTrajectory() {
+                const amplitudeX = Math.random() * (window.screen.availWidth / 2) - 50;
+                const amplitudeY = Math.random() * (window.screen.availWidth / 2) - 50;
+                const frequency = Math.random() * 2.5 + 2.5;
+                const phaseX = Math.random() * 5 * Math.PI;
+                const phaseY = Math.random() * 5 * Math.PI;
+                
+                return (t) => ({
+                    x: amplitudeX * Math.sin(frequency * t + phaseX),
+                    y: amplitudeY * Math.cos(frequency * t + phaseY),
+                });
+            }
+    
+            async function animateImage() {
+                const startPosition = { x: -50, y: -50 };
+                const endPosition = getRandomPosition();
+                const trajectory = getRandomTrajectory();
+                const duration = 4000; // 2 seconds
+    
+                image.style.left = startPosition.x + 'px';
+                image.style.top = startPosition.y + 'px';
+                image.style.display = 'block';
+    
+                let startTime = null;
+    
+                async function step(timestamp) {
+                    if (!startTime) {
+                        startTime = timestamp;
+                    }
+                    const progress = (timestamp - startTime) / duration;
+    
+                    if (progress < 1) {
+                        const { x, y } = trajectory(progress);
+                        image.style.transform = `translate(${x + endPosition.x}px, ${y + endPosition.y}px)`;
+                        requestAnimationFrame(step);
+                    } else {
+                        image.style.display = 'none';
+                        setTimeout(animateImage, (Math.random() * 3000) + 3000); // Wait for a random interval before starting again
+                    }
+                }
+    
+                requestAnimationFrame(step);
+            }
+    
+            setTimeout(animateImage, timeout);
+        }
+        penguin(3000);
     </script>
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
