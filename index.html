@@ -107,6 +107,9 @@
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white py-5" id="contact" style="margin-top: 90px;">
+        <h2 id="upload-form" style="font-size: 20px; color: white; text-align: center; cursor: pointer;">
+            <span style="background-color: #E47A2E !important; padding: 7px 15px; border-radius: 15px;">Upload Photos</span>
+        </h4>
         <div class="container text-center py-5">
             <div class="section-title position-relative text-center">
                 <h1 class="font-secondary display-3 text-white">Thank You</h1>
@@ -288,6 +291,13 @@
         }
         penguin(7000);
     </script>
+
+    <script>
+        document.getElementById("upload-form").addEventListener("click", () => {
+            window.open('https://forms.gle/jeHrR5ZzfbER9t6v7', '_blank');
+        });
+    </script>
+
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 </body>
