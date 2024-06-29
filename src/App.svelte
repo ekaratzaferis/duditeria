@@ -96,16 +96,16 @@
   }
 
   const images = [
-    'vue.png',
-    'sql.png',
-    'react.webp',
     'node.png',
+    'svelte.png',
+    'three.png',
+    'aws.png',
+    'chat.webp',
+    'react.webp',
     'mongo.png',
     'docker.png',
-    'chat.webp',
-    'svelte.png',
-    'aws.png',
-    'three.png',
+    'sql.png',
+    'vue.png',
   ];
 
   let currentImage = 0;
