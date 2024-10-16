@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitness Challenge</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: black;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      overflow: hidden;
+      flex-direction: column;
+    }
+
+    #spinButton {
+      font-size: 48px;
+      padding: 20px 40px;
+      border: none;
+      background-color: white;
+      color: black;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.5s ease;
+      position: absolute;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .slide-out {
+      transform: translateY(-100vh);
+    }
+
+    #letters {
+      font-size: 48px;
+      display: flex;
+      justify-content: space-around;
+      width: 300px;
+      visibility: hidden;
+      position: absolute;
+    }
+
+    #message {
+      font-size: 32px;
+      visibility: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes spin {
+      0% { transform: rotateX(0); }
+      100% { transform: rotateX(360deg); }
+    }
+
+    .spin-animation {
+      animation: spin 1s linear infinite;
+    }
+
+    .spin-animation:nth-child(2) {
+      animation-delay: 0.1s; /* Different phase */
+    }
+
+    .spin-animation:nth-child(3) {
+      animation-delay: 0.2s; /* Different phase */
+    }
+
+    .spin-animation:nth-child(4) {
+      animation-delay: 0.3s; /* Different phase */
+    }
+
+    .spin-animation:nth-child(5) {
+      animation-delay: 0.4s; /* Different phase */
+    }
+
+    .stopped {
+      animation: none;
+    }
+    
+    .letter {
+      font-size: 48px;
+      text-align: center;
+      width: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="spinButton">Looser</button>
+  
+  <div id="letters">
+    <div class="letter">A</div>
+    <div class="letter">B</div>
+    <div class="letter">C</div>
+    <div class="letter">D</div>
+    <div class="letter">E</div>
+  </div>
+
+  <div id="message"></div>
+
+  <script>
+    const spinButton = document.getElementById('spinButton');
+    const letters = document.querySelectorAll('.letter');
+    const lettersContainer = document.getElementById('letters');
+    const messageContainer = document.getElementById('message');
+
+    const messages = ["10km Run", "No coffee for 2 days", "24 hours fasting", "No hobbies for 2 days", "Mukbang", "Skip 2 dinners"];
+    const possibleLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(''); // Array of letters for randomness
+
+    function getRandomMessage() {
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      return messages[randomIndex];
+    }
+
+    function stopSpinning() {
+      letters.forEach(letter => {
+        letter.classList.remove('spin-animation');
+        letter.classList.add('stopped');
+      });
+
+      // Hide letters completely after stopping the spin
+      lettersContainer.style.visibility = 'hidden';
+      lettersContainer.style.display = 'none';
+
+      // Display the random message
+      messageContainer.innerText = getRandomMessage();
+      messageContainer.style.visibility = 'visible';
+    }
+
+    function startSpinning() {
+      letters.forEach((letter, index) => {
+        letter.classList.remove('stopped');
+        letter.classList.add('spin-animation');
+
+        // Change the letter randomly every 100ms (during each rotation)
+        setInterval(() => {
+          const randomLetter = possibleLetters[Math.floor(Math.random() * possibleLetters.length)];
+          letter.innerText = randomLetter;
+        }, 100); // Each letter changes frequently while spinning
+      });
+
+      messageContainer.style.visibility = 'hidden';
+      lettersContainer.style.display = 'flex'; // Ensure the letters are visible again
+    }
+
+    spinButton.addEventListener('click', () => {
+      spinButton.classList.add('slide-out');
+
+      setTimeout(() => {
+        spinButton.classList.add('hidden');
+        lettersContainer.style.visibility = 'visible';
+        startSpinning();
+
+        setTimeout(() => {
+          stopSpinning();
+        }, 3000); // Keep spinning for 3 seconds
+      }, 500);
+    });
+  </script>
+
+</body>
+</html>
