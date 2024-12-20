@@ -20,7 +20,7 @@
     const geometry = new THREE.BufferGeometry();
     const vertices = [];
 
-    const sprite = new THREE.TextureLoader().load('/disc.png');
+    const sprite = new THREE.TextureLoader().load('/logo-wave.png');
     sprite.colorSpace = THREE.SRGBColorSpace;
 
     for ( let i = 0; i < 3000; i ++ ) {
@@ -44,7 +44,7 @@
     renderer.setAnimationLoop( animate );
     document.getElementById('three-container').appendChild( renderer.domElement );
 
-    document.body.addEventListener('pointermove', onPointerMove );
+    document.body.addEventListener('pointermove', onPointerMove);
     window.addEventListener('resize', onWindowResize );
   }
 
@@ -97,15 +97,13 @@
 
   const images = [
     'node.png',
-    'svelte.png',
+    'svelte.webp',
     'three.png',
     'aws.png',
     'chat.webp',
     'react.webp',
-    'mongo.png',
-    'docker.png',
-    'sql.png',
-    'vue.png',
+    'mongo.webp',
+    'docker.png'
   ];
 
   let currentImage = 0;
@@ -119,26 +117,155 @@
     return () => clearInterval(intervalId); // Cleanup on component unmount
   });
 
+  class MouseSimulator {
+    constructor(maxWidth = window.innerWidth, maxHeight = window.innerHeight) {
+      this.maxWidth = maxWidth;
+      this.maxHeight = maxHeight;
+      this.currentX = maxWidth / 2;  // Start at center
+      this.currentY = maxHeight / 2;
+      this.velocityX = 0;
+      this.velocityY = 0;
+      
+      // Movement settings
+      this.maxSpeed = 10;          // Maximum pixels per move
+      this.inertia = 100;         // How much previous velocity affects next move
+      this.randomness = 0.3;      // How much random movement to add
+      this.edgeBoundary = 50;     // Stay this many pixels away from edges
+    }
+
+    getNextPosition() {
+      // Apply inertia to current velocity
+      this.velocityX *= this.inertia;
+      this.velocityY *= this.inertia;
+      
+      // Add random movement
+      this.velocityX += (Math.random() - 0.5) * this.maxSpeed * this.randomness;
+      this.velocityY += (Math.random() - 0.5) * this.maxSpeed * this.randomness;
+      
+      // Limit speed
+      const speed = Math.sqrt(this.velocityX ** 2 + this.velocityY ** 2);
+      if (speed > this.maxSpeed) {
+        this.velocityX = (this.velocityX / speed) * this.maxSpeed;
+        this.velocityY = (this.velocityY / speed) * this.maxSpeed;
+      }
+      
+      // Update position
+      this.currentX += this.velocityX;
+      this.currentY += this.velocityY;
+      
+      // Keep cursor within bounds
+      if (this.currentX < this.edgeBoundary) {
+        this.currentX = this.edgeBoundary;
+        this.velocityX *= -0.5;  // Bounce off edge
+      } else if (this.currentX > this.maxWidth - this.edgeBoundary) {
+        this.currentX = this.maxWidth - this.edgeBoundary;
+        this.velocityX *= -0.5;
+      }
+      
+      if (this.currentY < this.edgeBoundary) {
+        this.currentY = this.edgeBoundary;
+        this.velocityY *= -0.5;
+      } else if (this.currentY > this.maxHeight - this.edgeBoundary) {
+        this.currentY = this.maxHeight - this.edgeBoundary;
+        this.velocityY *= -0.5;
+      }
+      
+      return {
+        x: Math.round(this.currentX),
+        y: Math.round(this.currentY)
+      };
+    }
+  }
+
+  onMount(() => {
+    const magicMouse = new MouseSimulator();
+
+    setInterval(() => {
+      const next = magicMouse.getNextPosition();
+      onPointerMove({
+        isPrimary: true,
+        clientX: next.x,
+        clientY: next.y
+      })
+    }, 100);
+  })
+
 </script>
 
 <div id="logo-wrapper" on:click={contact}>
-  <div id="logo"><img src="/logo-trans.png" alt="Duditeria Logo"></div>
-  <div>Duditeria</div>
+  <div id="logo"><img src="/logo-wave.png" alt="Duditeria Logo"></div>
+  <!-- <div>Duditeria</div> -->
 </div>
 <div id="three-container"></div>
 <div class="container">
-  <div id="cta" on:click={contact}>You name it, we build it!</div>
-  <div id="image-container">
-    {#each images as image, index}
-      {#if index === currentImage}
-        <img src={image} alt="Image {index + 1}" transition:fade={{ duration: 1000 }} />
-      {/if}
-    {/each}
+  <div id="title"><h1>Duditeria</h1></div>
+  <div id="animation">
+    <div id="cta" on:click={contact}>You name it, we build it!</div>
+    <div id="image-container">
+      {#each images as image, index}
+        {#if index === currentImage}
+          <img src={image} alt="Image {index + 1}" transition:fade={{ duration: 1000 }} />
+        {/if}
+      {/each}
+    </div>
   </div>
 </div>
 <div id="copyright">Copyright © {new Date().getFullYear()} Duditeria. All rights reserved.</div>
 
 <style>
+
+  #title {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 30vh;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #title h1 {
+    margin-bottom: 0;
+  }
+
+  @media screen and (orientation: portrait) {
+    #title h1 {
+      margin-bottom: 0;
+      font-size: 5rem;
+    }
+    #cta {
+      font-size: 2rem;
+    }
+    #animation {
+      flex-direction: column;
+    }
+  }
+
+  @media screen and (orientation: landscape) {
+    #title h1 {
+      margin-bottom: 0;
+      font-size: 8rem;
+    }
+    #cta {
+      font-size: 3rem;
+    }
+    #animation {
+      flex-direction: row;
+    }
+    #image-container img {
+      margin-top: -10px;
+    }
+    #image-container {
+      margin-left: 1.5rem;
+    }
+  }
+
+  #animation {
+    display: flex;
+    width: 100%;
+    height: 10vh;
+    align-items: center;
+    justify-content: center;
+  }
 
   .container {
     /* Adjust styling as needed */
@@ -154,20 +281,21 @@
   }
 
   #cta {
-    font-size: 3rem;
     text-align: center;
     cursor: pointer;
     margin-bottom: 1rem;
   }
 
   #image-container {
-    position: relative;
     display: flex;
-    justify-content: center;
+    height: 10vh;
+    align-items: center;
+    width: 60px;
+    margin-left: 1.5rem;
   }
 
   #image-container img {
-    height: 20vh;
+    height: 60px;
     z-index: 10;
     position: absolute;
   }
@@ -184,9 +312,9 @@
     cursor: pointer;
   }
   #logo {
-    background: rgba(145,98,172,255);
-    width: 65px;
-    height: 65px;
+    background: rgba(145,98,172, 0);
+    width: 3rem;
+    height: 3rem;
     border-radius: 100px;
     display: flex;
     align-items: center;
@@ -194,8 +322,8 @@
     flex-direction: row;
   }
   #logo img {
-    width: 50px;
-    height: 50px;
+    width: 5rem;
+    height: 5rem;
   }
   #copyright {
     position: absolute;
