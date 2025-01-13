@@ -31,25 +31,52 @@
 
     <script>
         const CLIENT_ID = '3a24deb0ee6e49fcacbec007c67f9084'; // Replace with your client ID
-        const REDIRECT_URI = 'https://duditeria.com/korniza'; // Updated redirect URI
+        const REDIRECT_URI = 'https://duditeria.com/korniza';
         
         async function init() {
             // Check if we have an access token
-            const params = new URLSearchParams(window.location.hash.substring(1));
-            const accessToken = params.get('access_token');
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            const error = params.get('error');
 
-            if (!accessToken) {
-                // If no token, redirect to Adobe login
-                const authUrl = `https://ims-na1.adobelogin.com/ims/authorize?` +
+            if (error) {
+                document.getElementById('gallery').innerHTML = 
+                    `<div class="loading">Authentication Error: ${error}</div>`;
+                return;
+            }
+
+            if (!code) {
+                // If no code, redirect to Adobe login
+                const state = Math.random().toString(36).substring(7);
+                const authUrl = `https://ims-na1.adobelogin.com/ims/authorize/v2?` +
                     `client_id=${CLIENT_ID}` +
                     `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
                     `&scope=lr_partner_apis` +
-                    `&response_type=token`;
+                    `&response_type=code` +
+                    `&state=${state}`;
                 window.location.href = authUrl;
                 return;
             }
 
             try {
+                // Exchange code for access token
+                const tokenResponse = await fetch('https://ims-na1.adobelogin.com/ims/token/v3', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        grant_type: 'authorization_code',
+                        client_id: CLIENT_ID,
+                        client_secret: 'YOUR_CLIENT_SECRET_HERE', // Add your client secret
+                        code: code,
+                        redirect_uri: REDIRECT_URI
+                    })
+                });
+                
+                const tokenData = await tokenResponse.json();
+                const accessToken = tokenData.access_token;
+
                 // Get catalog
                 const catalogResponse = await fetch('https://lr.adobe.io/v2/catalog', {
                     headers: {
@@ -70,7 +97,7 @@
                 
                 // Display photos
                 const gallery = document.getElementById('gallery');
-                gallery.innerHTML = ''; // Clear loading message
+                gallery.innerHTML = '';
                 
                 assets.resources.forEach(asset => {
                     const img = document.createElement('img');
@@ -80,7 +107,7 @@
                     gallery.appendChild(img);
                 });
             } catch (error) {
-                console.error('Error fetching photos:', error);
+                console.error('Error:', error);
                 document.getElementById('gallery').innerHTML = 
                     '<div class="loading">Error loading photos. Please check console for details.</div>';
             }
