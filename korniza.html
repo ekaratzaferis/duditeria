@@ -96,11 +96,11 @@
                 }
 
                 // Get catalog
-                const catalog = await getAsset('https://lr.adobe.io/v2/catalog');
+                const catalog = await getAsset(accessToken, 'https://lr.adobe.io/v2/catalog');
                 console.log(catalog)
 
                 // Get albums //
-                const albums = await getAsset(`https://lr.adobe.io/v2/catalogs/${catalog.id}/albums?limit=10000`);
+                const albums = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums?limit=10000`);
                 console.log(albums)
 
                 const randomAlbums = [
@@ -126,7 +126,7 @@
                 console.log(randomAlbums)
 
                 for (const album of albums) {
-                    // const photos = await fetch(`https://lr.adobe.io/v2/catalogs/${catalog.id}/assets/${al}`);
+                    // const photos = await fetch(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/assets/${al}`);
                 }
                 
                 // // Display photos
@@ -148,7 +148,7 @@
 
         init();
 
-        async function getAsset(URL) {
+        async function getAsset(accessToken ,URL) {
             const res = await fetch(URL, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
