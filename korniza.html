@@ -51,7 +51,7 @@
                 const authUrl = `https://ims-na1.adobelogin.com/ims/authorize/v2?` +
                     `client_id=${CLIENT_ID}` +
                     `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
-                    `&scope=lr_partner_apis` +
+                    `&scope=AdobeID,openid,lr_partner_apis,offline_access,lr_partner_rendition_apis` +
                     `&response_type=code` +
                     `&state=${state}`;
                 window.location.href = authUrl;
