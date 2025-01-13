@@ -109,10 +109,11 @@
                 }
 
                 let catalogText = await catalogResponse.text();
-                // Remove the "while(1){};" prefix if present
+                console.log(catalogText)
                 if (catalogText.startsWith("while(1){};")) {
                     catalogText = catalogText.slice("while(1){};".length);
                 }
+                console.log(catalogText)
 
                 // Parse the cleaned-up JSON
                 const catalog = JSON.parse(catalogText);
@@ -130,7 +131,15 @@
                     throw new Error(`Assets Error (${assetsResponse.status}): ${errorText}`);
                 }
 
-                const assets = await assetsResponse.json();
+                let assetsText = await assetsResponse.text();
+                console.log(assetsText)
+                if (assetsText.startsWith("while(1){};")) {
+                    assetsText = assetsText.slice("while(1){};".length);
+                }
+                console.log(assetsText)
+
+                // Parse the cleaned-up JSON
+                const assets = JSON.parse(assetsText);
                 
                 // Display photos
                 gallery.innerHTML = '';
@@ -142,6 +151,7 @@
                     img.alt = asset.payload.title || 'Untitled photo';
                     gallery.appendChild(img);
                 });
+
             } catch (error) {
                 console.error('Error:', error);
                 gallery.innerHTML = `<div class="error">Error: ${error.message}\n\nCheck console for more details.</div>`;
