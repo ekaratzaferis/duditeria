@@ -1,81 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lightroom Photo Downloader</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lightroom Gallery</title>
+    <style>
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+        .photo {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-family: sans-serif;
+        }
+    </style>
 </head>
 <body>
-  <h1>Lightroom Photo Downloader</h1>
-  <button id="authenticate">Authenticate with Adobe</button>
-  <button id="downloadPhotos" disabled>Download 20 Random Photos</button>
-  <div id="status"></div>
+    <div id="gallery" class="gallery">
+        <div class="loading">Loading photos...</div>
+    </div>
 
-  <script>
-    const CLIENT_ID = "9bddf27935e44905bcae5465c53d3238"; // Replace with your Adobe Client ID
-    const REDIRECT_URI = `${window.location.origin}`;
-    let accessToken = null;
+    <script>
+        const CLIENT_ID = '9bddf27935e44905bcae5465c53d3238'; // Replace with your client ID
+        const REDIRECT_URI = 'http://duditeria.com/korniza.html'; // Update with your redirect URI
+        
+        async function init() {
+            // Check if we have an access token
+            const params = new URLSearchParams(window.location.hash.substring(1));
+            const accessToken = params.get('access_token');
 
-    document.getElementById('authenticate').addEventListener('click', () => {
-        const authURL = `https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=${CLIENT_ID}&scope=openid,lr_partner_apis,offline_access&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
-        window.location.href = authURL;
-    });
+            if (!accessToken) {
+                // If no token, redirect to Adobe login
+                const authUrl = `https://ims-na1.adobelogin.com/ims/authorize?` +
+                    `client_id=${CLIENT_ID}` +
+                    `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
+                    `&scope=lr_partner_apis` +
+                    `&response_type=token`;
+                window.location.href = authUrl;
+                return;
+            }
 
-    // Check for access token in URL fragment after redirect
-    if (window.location.hash) {
-      const hash = window.location.hash.substring(1);
-      const params = new URLSearchParams(hash);
-      accessToken = params.get('access_token');
-
-      if (accessToken) {
-        document.getElementById('status').innerText = 'Authenticated successfully!';
-        document.getElementById('downloadPhotos').disabled = false;
-      }
-    }
-
-    document.getElementById('downloadPhotos').addEventListener('click', async () => {
-      if (!accessToken) {
-        alert('Please authenticate first!');
-        return;
-      }
-
-      try {
-        // Fetch photo metadata
-        const response = await fetch('https://lr.adobe.io/v2/catalogs/primary/assets', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch photos');
+            try {
+                // Get catalog
+                const catalogResponse = await fetch('https://lr.adobe.io/v2/catalog', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'X-Api-Key': CLIENT_ID
+                    }
+                });
+                const catalog = await catalogResponse.json();
+                
+                // Get assets
+                const assetsResponse = await fetch(`https://lr.adobe.io/v2/catalogs/${catalog.id}/assets?limit=20`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'X-Api-Key': CLIENT_ID
+                    }
+                });
+                const assets = await assetsResponse.json();
+                
+                // Display photos
+                const gallery = document.getElementById('gallery');
+                gallery.innerHTML = ''; // Clear loading message
+                
+                assets.resources.forEach(asset => {
+                    const img = document.createElement('img');
+                    img.className = 'photo';
+                    img.src = `${asset.links['/rels/rendition_type/2048']}?access_token=${accessToken}`;
+                    img.alt = asset.payload.title || 'Untitled photo';
+                    gallery.appendChild(img);
+                });
+            } catch (error) {
+                console.error('Error fetching photos:', error);
+                document.getElementById('gallery').innerHTML = 
+                    '<div class="loading">Error loading photos. Please check console for details.</div>';
+            }
         }
 
-        const data = await response.json();
-        const photos = data.resources;
-
-        if (photos.length === 0) {
-          alert('No photos available in your Lightroom account.');
-          return;
-        }
-
-        // Shuffle and select 20 random photos
-        const randomPhotos = photos.sort(() => 0.5 - Math.random()).slice(0, 20);
-
-        // Download each photo
-        randomPhotos.forEach((photo, index) => {
-          const a = document.createElement('a');
-          a.href = photo.links.download;
-          a.download = `photo_${index + 1}.jpg`;
-          a.click();
-        });
-
-        alert('Downloaded 20 random photos.');
-      } catch (error) {
-        console.error('Error downloading photos:', error);
-        alert('Failed to download photos.');
-      }
-    });
-  </script>
+        init();
+    </script>
 </body>
 </html>
