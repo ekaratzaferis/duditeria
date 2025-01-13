@@ -17,8 +17,8 @@
     let accessToken = null;
 
     document.getElementById('authenticate').addEventListener('click', () => {
-        const authURL = `https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=${CLIENT_ID}&scope=openid,lr_partner_apis&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
-      window.location.href = authURL;
+        const authURL = `https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=${CLIENT_ID}&scope=openid,lr_partner_apis,offline_access,lr_partner_rendition_apis&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+        window.location.href = authURL;
     });
 
     // Check for access token in URL fragment after redirect

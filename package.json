@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && cp public/CNAME docs/CNAME && cp skliropiriniko.html docs/skliropiriniko.html && cp korniza.html docs/korniza.html",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "upload": "npm run build && git add --all && git commit -a -m 'quick upload' && git push"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
