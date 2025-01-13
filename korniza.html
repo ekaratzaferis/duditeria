@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lightroom Gallery</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         .gallery {
             display: grid;
@@ -33,6 +35,7 @@
     </style>
 </head>
 <body>
+    <button id="downloadButton">Download All Images as Zip</button>
     <div id="gallery" class="gallery">
         <div class="loading">Loading photos...</div>
     </div>
@@ -97,29 +100,30 @@
 
                 // Get catalog
                 const catalog = await getAsset(accessToken, 'https://lr.adobe.io/v2/catalog');
-                console.log(catalog)
 
                 // Get albums //
                 const { resources: albums } = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums?limit=10000`);
-                console.log(albums)
 
 
                 gallery.innerHTML = '';
                 const randomPhotos = [];
-                for (let i = 0; i <= 5; i++) {
-                    console.log('-----')
+                while (randomPhotos.length < 100) {
                     const randomAlbum = pickRandom(albums);
-                    console.log(randomAlbum)
                     const { resources: photos } = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums/${randomAlbum.id}/assets`);
-                    for (let j = 0; j <= 3; j++) {
-                        if (photos.length > 0) {
-                            const randomId = pickRandom(photos).asset.id;
+                    
+                    if (photos.length > 0) {
+                        const randomId = pickRandom(photos).asset.id;
+                        
+                        if (randomPhotos.includes(randomId)) continue;
+                        else {
+                            randomPhotos.push(randomId);
                             const photoURL = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/assets/${randomId}/renditions/2048`, true);
                             const img = document.createElement('img');
                             img.className = 'photo';
                             img.src = photoURL;
                             gallery.appendChild(img);
                         }
+
                     }
                 }
 
@@ -162,5 +166,40 @@
             return items[Math.floor(Math.random()*items.length)];
         }
     </script>
+
+    <script>
+        document.getElementById("downloadButton").addEventListener("click", function() {
+            // Create a new JSZip instance
+            const zip = new JSZip();
+
+            // Get all image elements on the page
+            const images = document.querySelectorAll('img');
+            
+            let promises = [];
+
+            // Loop through each image
+            images.forEach((img, index) => {
+                const imageUrl = img.src;
+
+                // Fetch the image as a blob and add it to the zip
+                const promise = fetch(imageUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    // Add the image blob to the zip
+                    zip.file('image' + (index + 1) + '.' + imageUrl.split('.').pop(), blob);
+                });
+
+                promises.push(promise);
+            });
+
+            // Once all images are processed, create the zip file
+            Promise.all(promises).then(() => {
+                // Generate the zip file and trigger the download
+                zip.generateAsync({ type: 'blob' }).then(function(content) {
+                    saveAs(content, "images.zip");
+                });
+            });
+        });
+  </script>
 </body>
 </html>
