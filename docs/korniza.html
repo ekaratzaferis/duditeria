@@ -110,6 +110,9 @@
                     const randomAlbum = pickRandom(albums);
 
                     const temp = randomAlbum.payload.name.split('-');
+                    console.log(temp)
+                    console.log(parseInt(temp[0]))
+                    console.log(parseInt(temp[0]) < 2017)
                     if (parseInt(temp[0]) < 2017) continue;
 
                     const { resources: photos } = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums/${randomAlbum.id}/assets`);
