@@ -113,9 +113,10 @@
                     const { resources: photos } = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums/${randomAlbum.id}/assets`);
                     for (let j = 0; j <= 3; j++) {
                         const randomId = pickRandom(photos).asset.id;
+                        const photoURL = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/assets/${randomId}/renditions/2048`, true);
                         const img = document.createElement('img');
                         img.className = 'photo';
-                        img.src = `https://lr.adobe.io/v2/catalogs/${catalog.id}/assets/${randomId}/renditions/2048?access_token=${accessToken}`;
+                        img.src = photoURL;
                         gallery.appendChild(img);
                     }
                 }
@@ -128,7 +129,7 @@
 
         init();
 
-        async function getAsset(accessToken, URL, noJSON) {
+        async function getAsset(accessToken, URL, isImage) {
             const res = await fetch(URL, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -141,12 +142,14 @@
                 throw new Error(`Catalog Error (${res.status}): ${errorText}`);
             }
 
-            if (noJSON === true) {
-                return res;
+            if (isImage === true) {
+                let blob = await res.blob();
+                return URL.createObjectURL(blob);
+            } else {
+                let text = await res.text();
+                return JSON.parse(text.replace('while (1) {}', ''));
             }
 
-            let text = await res.text();
-            return JSON.parse(text.replace('while (1) {}', ''));
         }
 
         function pickRandom(items) {
