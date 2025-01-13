@@ -96,49 +96,49 @@
                 }
 
                 // Get catalog
-                const catalogResponse = await fetch('https://lr.adobe.io/v2/catalog', {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'X-Api-Key': CLIENT_ID
-                    }
-                });
+                const catalog = await getAsset('https://lr.adobe.io/v2/catalog');
+                console.log(catalog)
 
-                if (!catalogResponse.ok) {
-                    const errorText = await catalogResponse.text();
-                    throw new Error(`Catalog Error (${catalogResponse.status}): ${errorText}`);
+                // Get albums //
+                const albums = await getAsset(`https://lr.adobe.io/v2/catalogs/${catalog.id}/albums?limit=10000`);
+                console.log(albums)
+
+                const randomAlbums = [
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums),
+                    pickRandom(albums)
+                ];
+
+                console.log(randomAlbums)
+
+                for (const album of albums) {
+                    // const photos = await fetch(`https://lr.adobe.io/v2/catalogs/${catalog.id}/assets/${al}`);
                 }
-
-                let catalogText = await catalogResponse.text();
-                console.log(catalogText)
-                console.log(catalogText.indexOf('while (1) {}'))
-                const catalog = JSON.parse(catalogText.replace('while (1) {}', ''));
                 
-                // Get assets
-                const assetsResponse = await fetch(`https://lr.adobe.io/v2/catalogs/${catalog.id}/assets?limit=20`, {
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'X-Api-Key': CLIENT_ID
-                    }
-                });
-
-                if (!assetsResponse.ok) {
-                    const errorText = await assetsResponse.text();
-                    throw new Error(`Assets Error (${assetsResponse.status}): ${errorText}`);
-                }
-
-                let assetsText = await assetsResponse.text();
-                const assets = JSON.parse(assetsText.replace('while (1) {}', ''));
+                // // Display photos
+                // gallery.innerHTML = '';
                 
-                // Display photos
-                gallery.innerHTML = '';
-                
-                assets.resources.forEach(asset => {
-                    const img = document.createElement('img');
-                    img.className = 'photo';
-                    img.src = `${asset.links['/rels/rendition_type/2048']}?access_token=${accessToken}`;
-                    img.alt = asset.payload.title || 'Untitled photo';
-                    gallery.appendChild(img);
-                });
+                // assets.resources.forEach(asset => {
+                //     const img = document.createElement('img');
+                //     img.className = 'photo';
+                //     img.src = `${asset.links['/rels/rendition_type/2048'].href}?access_token=${accessToken}`;
+                //     img.alt = asset.payload.title || 'Untitled photo';
+                //     gallery.appendChild(img);
+                // });
 
             } catch (error) {
                 console.error('Error:', error);
@@ -147,6 +147,27 @@
         }
 
         init();
+
+        async function getAsset(URL) {
+            const res = await fetch(URL, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'X-Api-Key': CLIENT_ID
+                }
+            });
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(`Catalog Error (${res.status}): ${errorText}`);
+            }
+
+            let text = await res.text();
+            return JSON.parse(text.replace('while (1) {}', ''));
+        }
+
+        function pickRandom(items) {
+            return items[Math.floor(Math.random()*items.length)];
+        }
     </script>
 </body>
 </html>
