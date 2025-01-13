@@ -17,7 +17,7 @@
     let accessToken = null;
 
     document.getElementById('authenticate').addEventListener('click', () => {
-        const authURL = `https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=${CLIENT_ID}&scope=openid,lr_partner_apis,offline_access&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+        const authURL = `https://ims-na1.adobelogin.com/ims/authorize/v2?client_id=${CLIENT_ID}&scope=openid,lr_partner_apis,offline_access&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
         window.location.href = authURL;
     });
 
