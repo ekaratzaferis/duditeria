@@ -103,22 +103,26 @@
                 const { resources: albums } = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums?limit=10000`);
                 console.log(albums)
 
-                for (let i = 0; i <= 50; i++) {
+
+                gallery.innerHTML = '';
+                const randomPhotos = [];
+                for (let i = 0; i <= 5; i++) {
+                    console.log('-----')
                     const randomAlbum = pickRandom(albums);
+                    console.log(randomAlbum)
                     const { resources: photos } = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums/${randomAlbum.id}/assets`);
-                    console.log(photos)
+                    for (let j = 0; j <= 3; j++) {
+                        const randomId = pickRandom(photos).asset.id;
+                        console.log(randomId)
+                        const photo = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/assets/${randomId}/renditions/2048`);
+                        console.log(photo)
+
+                        const img = document.createElement('img');
+                        img.className = 'photo';
+                        img.src = photo;
+                        gallery.appendChild(img);
+                    }
                 }
-                
-                // // Display photos
-                // gallery.innerHTML = '';
-                
-                // assets.resources.forEach(asset => {
-                //     const img = document.createElement('img');
-                //     img.className = 'photo';
-                //     img.src = `${asset.links['/rels/rendition_type/2048'].href}?access_token=${accessToken}`;
-                //     img.alt = asset.payload.title || 'Untitled photo';
-                //     gallery.appendChild(img);
-                // });
 
             } catch (error) {
                 console.error('Error:', error);
