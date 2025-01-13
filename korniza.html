@@ -110,9 +110,8 @@
 
                 let catalogText = await catalogResponse.text();
                 console.log(catalogText)
-                console.log(catalogText.indexOf('while(1){}'))
-                console.log(catalogText.indexOf('while(1) {}'))
-                const catalog = JSON.parse(catalogText.replace('while(1){}', ''));
+                console.log(catalogText.indexOf('while (1) {}'))
+                const catalog = JSON.parse(catalogText.replace('while (1) {}', ''));
                 
                 // Get assets
                 const assetsResponse = await fetch(`https://lr.adobe.io/v2/catalogs/${catalog.id}/assets?limit=20`, {
@@ -128,7 +127,7 @@
                 }
 
                 let assetsText = await assetsResponse.text();
-                const assets = JSON.parse(assetsText.replace('while(1){}', ''));
+                const assets = JSON.parse(assetsText.replace('while (1) {}', ''));
                 
                 // Display photos
                 gallery.innerHTML = '';
