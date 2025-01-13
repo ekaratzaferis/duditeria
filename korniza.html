@@ -22,6 +22,14 @@
             padding: 2rem;
             font-family: sans-serif;
         }
+        .error {
+            color: red;
+            padding: 1rem;
+            border: 1px solid red;
+            margin: 1rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 <body>
@@ -30,23 +38,22 @@
     </div>
 
     <script>
-        const CLIENT_ID = '3a24deb0ee6e49fcacbec007c67f9084'; // Replace with your client ID
+        const CLIENT_ID = '3a24deb0ee6e49fcacbec007c67f9084';
+        const CLIENT_SECRET = 'p8e-gClwj947HQ14Vu_Cq3pswFeT1iayGiUp';
         const REDIRECT_URI = 'https://duditeria.com/korniza';
         
         async function init() {
-            // Check if we have an access token
             const params = new URLSearchParams(window.location.search);
             const code = params.get('code');
             const error = params.get('error');
+            const gallery = document.getElementById('gallery');
 
             if (error) {
-                document.getElementById('gallery').innerHTML = 
-                    `<div class="loading">Authentication Error: ${error}</div>`;
+                gallery.innerHTML = `<div class="error">Authentication Error: ${error}</div>`;
                 return;
             }
 
             if (!code) {
-                // If no code, redirect to Adobe login
                 const state = Math.random().toString(36).substring(7);
                 const authUrl = `https://ims-na1.adobelogin.com/ims/authorize/v2?` +
                     `client_id=${CLIENT_ID}` +
@@ -59,23 +66,34 @@
             }
 
             try {
-                // Exchange code for access token
+                // Token exchange
+                const tokenBody = new URLSearchParams({
+                    grant_type: 'authorization_code',
+                    client_id: CLIENT_ID,
+                    client_secret: CLIENT_SECRET,
+                    code: code,
+                    redirect_uri: REDIRECT_URI
+                });
+
                 const tokenResponse = await fetch('https://ims-na1.adobelogin.com/ims/token/v3', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: new URLSearchParams({
-                        grant_type: 'authorization_code',
-                        client_id: CLIENT_ID,
-                        client_secret: 'YOUR_CLIENT_SECRET_HERE', // Add your client secret
-                        code: code,
-                        redirect_uri: REDIRECT_URI
-                    })
+                    body: tokenBody
                 });
-                
+
+                if (!tokenResponse.ok) {
+                    const errorText = await tokenResponse.text();
+                    throw new Error(`Token Error (${tokenResponse.status}): ${errorText}`);
+                }
+
                 const tokenData = await tokenResponse.json();
                 const accessToken = tokenData.access_token;
+
+                if (!accessToken) {
+                    throw new Error('No access token received');
+                }
 
                 // Get catalog
                 const catalogResponse = await fetch('https://lr.adobe.io/v2/catalog', {
@@ -84,6 +102,12 @@
                         'X-Api-Key': CLIENT_ID
                     }
                 });
+
+                if (!catalogResponse.ok) {
+                    const errorText = await catalogResponse.text();
+                    throw new Error(`Catalog Error (${catalogResponse.status}): ${errorText}`);
+                }
+
                 const catalog = await catalogResponse.json();
                 
                 // Get assets
@@ -93,10 +117,15 @@
                         'X-Api-Key': CLIENT_ID
                     }
                 });
+
+                if (!assetsResponse.ok) {
+                    const errorText = await assetsResponse.text();
+                    throw new Error(`Assets Error (${assetsResponse.status}): ${errorText}`);
+                }
+
                 const assets = await assetsResponse.json();
                 
                 // Display photos
-                const gallery = document.getElementById('gallery');
                 gallery.innerHTML = '';
                 
                 assets.resources.forEach(asset => {
@@ -108,8 +137,7 @@
                 });
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('gallery').innerHTML = 
-                    '<div class="loading">Error loading photos. Please check console for details.</div>';
+                gallery.innerHTML = `<div class="error">Error: ${error.message}\n\nCheck console for more details.</div>`;
             }
         }
 
