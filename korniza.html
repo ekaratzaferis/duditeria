@@ -113,13 +113,9 @@
                     const { resources: photos } = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums/${randomAlbum.id}/assets`);
                     for (let j = 0; j <= 3; j++) {
                         const randomId = pickRandom(photos).asset.id;
-                        console.log(randomId)
-                        const photo = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/assets/${randomId}/renditions/2048`);
-                        console.log(photo)
-
                         const img = document.createElement('img');
                         img.className = 'photo';
-                        img.src = photo;
+                        img.src = `https://lr.adobe.io/v2/catalogs/${catalog.id}/assets/${randomId}/renditions/2048?access_token=${accessToken}`;
                         gallery.appendChild(img);
                     }
                 }
@@ -132,7 +128,7 @@
 
         init();
 
-        async function getAsset(accessToken ,URL) {
+        async function getAsset(accessToken, URL, noJSON) {
             const res = await fetch(URL, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -143,6 +139,10 @@
             if (!res.ok) {
                 const errorText = await res.text();
                 throw new Error(`Catalog Error (${res.status}): ${errorText}`);
+            }
+
+            if (noJSON === true) {
+                return res;
             }
 
             let text = await res.text();
