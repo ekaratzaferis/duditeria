@@ -107,8 +107,13 @@
 
                 gallery.innerHTML = '';
                 const randomPhotos = [];
-                while (randomPhotos.length < 100) {
+                while (randomPhotos.length < 30) {
+
                     const randomAlbum = pickRandom(albums);
+
+                    const temp = randomAlbum.payload.name.split('-');
+                    if (parseInt(temp[0]) < 2017) continue;
+
                     const { resources: photos } = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums/${randomAlbum.id}/assets`);
                     
                     if (photos.length > 0) {
