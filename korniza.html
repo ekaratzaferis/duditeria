@@ -108,7 +108,14 @@
                     throw new Error(`Catalog Error (${catalogResponse.status}): ${errorText}`);
                 }
 
-                const catalog = await catalogResponse.json();
+                let catalogText = await catalogResponse.text();
+                // Remove the "while(1){};" prefix if present
+                if (catalogText.startsWith("while(1){};")) {
+                    catalogText = catalogText.slice("while(1){};".length);
+                }
+
+                // Parse the cleaned-up JSON
+                const catalog = JSON.parse(catalogText);
                 
                 // Get assets
                 const assetsResponse = await fetch(`https://lr.adobe.io/v2/catalogs/${catalog.id}/assets?limit=20`, {
