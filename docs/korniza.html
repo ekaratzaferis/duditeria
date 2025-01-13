@@ -105,7 +105,7 @@
 
                 for (let i = 0; i <= 50; i++) {
                     const randomAlbum = pickRandom(albums);
-                    const { resources: photos } = await fetch(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums/${randomAlbum.id}/assets`);
+                    const { resources: photos } = await getAsset(accessToken, `https://lr.adobe.io/v2/catalogs/${catalog.id}/albums/${randomAlbum.id}/assets`);
                     console.log(photos)
                 }
                 
