@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp skliropiriniko.html docs/skliropiriniko.html && cp korniza.html docs/korniza.html",
+    "build": "vite build && cp public/CNAME docs/CNAME && cp skliropiriniko.html docs/skliropiriniko.html && cp korniza.html docs/korniza.html",
     "preview": "vite preview"
   },
   "devDependencies": {
