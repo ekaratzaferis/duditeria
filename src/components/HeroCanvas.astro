@@ -1,0 +1,34 @@
+---
+---
+
+<canvas id="limbo-canvas"></canvas>
+
+<script>
+  import { initLimboEngine } from '../scripts/limbo-engine.js';
+
+  const canvas = document.getElementById('limbo-canvas');
+  if (canvas) {
+    try {
+      const dispose = initLimboEngine(canvas);
+      window.addEventListener('beforeunload', dispose, { once: true });
+    } catch (err) {
+      console.error('[limbo-engine] init failed:', err);
+      document.body.style.background = '#800000'; // dark red = JS threw
+    }
+  } else {
+    console.error('[limbo-engine] canvas not found');
+    document.body.style.background = '#000080'; // dark blue = canvas missing
+  }
+</script>
+
+<style>
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    display: block;
+  }
+</style>

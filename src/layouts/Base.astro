@@ -1,0 +1,68 @@
+---
+const {
+  title = 'Duditeria',
+  description = 'Duditeria — Software architecture and engineering by Alexandros Karatzaferis.',
+  ogImage = '/og-image.png',
+  canonical = 'https://duditeria.com/',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JSON-LD -->
+    <script is:inline type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Duditeria",
+        "url": "https://duditeria.com",
+        "founder": {
+          "@type": "Person",
+          "name": "Alexandros Karatzaferis",
+          "email": "ekaratzaferis@gmail.com",
+          "sameAs": ["https://linkedin.com/in/ekaratzaferis"]
+        }
+      }
+    </script>
+
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

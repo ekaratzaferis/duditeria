@@ -1,20 +1,16 @@
 {
   "name": "duditeria",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build && cp public/CNAME docs/CNAME && cp skliropiriniko.html docs/skliropiriniko.html && cp korniza.html docs/korniza.html",
-    "preview": "vite preview",
-    "upload": "npm run build && git add --all && git commit -a -m 'quick upload' && git push"
-  },
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^3.1.1",
-    "svelte": "^4.2.18",
-    "vite": "^5.3.1"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
   },
   "dependencies": {
-    "three": "0.166.0"
+    "three": "^0.168.0"
+  },
+  "devDependencies": {
+    "astro": "^6.1.5"
   }
 }
