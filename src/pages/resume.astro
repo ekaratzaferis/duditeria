@@ -1,0 +1,713 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/global.css';
+---
+
+<Base
+  title="Resume — Alexandros Karatzaferis"
+  description="Software Architect and Principal Engineer with 10+ years building scalable SaaS systems."
+  canonical="https://duditeria.com/resume"
+>
+  <nav class="back-nav">
+    <a href="/">← Duditeria</a>
+  </nav>
+
+  <main>
+    <div class="bento">
+
+      <!-- ── 1. NAME ───────────────────────────────────────────────── -->
+      <div class="card card-name" data-reveal style="--d:0">
+        <p class="name-eyebrow">Software Architect · Principal Engineer</p>
+        <h1 class="name-text">Alexandros<br>Karatzaferis</h1>
+        <p class="name-sub">10+ years · Athens, Greece</p>
+      </div>
+
+      <!-- ── 2. PHOTO ──────────────────────────────────────────────── -->
+      <!--
+        Drop your photo at public/photo.jpg — the card will fill automatically.
+        Until then it shows the AK monogram.
+      -->
+      <div class="card card-photo" data-reveal style="--d:1">
+        <img src="/alex.webp" alt="Alexandros Karatzaferis" class="photo-img" />
+      </div>
+
+      <!-- ── 3. EXPERIENCE (spans rows 1+2) ────────────────────────── -->
+      <div class="card card-exp" data-reveal style="--d:2">
+        <h2 class="card-label">Experience</h2>
+
+        <div class="tl">
+
+          <div class="tl-item">
+            <div class="tl-head">
+              <div>
+                <span class="tl-role">Software Architect</span>
+                <span class="tl-company">THEFUTUREOFJEWELRY · Remote</span>
+              </div>
+              <span class="tl-dates">Feb 2020 – Present</span>
+            </div>
+            <ul class="tl-bullets">
+              <li>Own the long-term technical architecture of the core product — focusing on scalability, reliability, and high code quality across the team.</li>
+              <li>Bridge business needs and engineering delivery; manage the technical debt roadmap in an agile environment, balancing platform improvements with critical feature work.</li>
+              <li>Provide architectural oversight and mentorship across the team, and represent engineering in C-level discussions, contributing to company and product direction.</li>
+              <li>Champion KISS principles — keeping systems simple, fast to iterate, and maintainable long-term.</li>
+              <li>Integrate AI coding agents (Claude Code, LLM-assisted tooling) into the engineering workflow — measurably reducing delivery overhead without sacrificing code quality.</li>
+            </ul>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-head">
+              <div>
+                <span class="tl-role">Software Engineer</span>
+                <span class="tl-company">Viral Loops · Athens</span>
+              </div>
+              <span class="tl-dates">Jan 2018 – Jan 2020</span>
+            </div>
+            <ul class="tl-bullets">
+              <li>Maintained and evolved the core product of a template-based viral &amp; referral marketing platform, taking full ownership of new feature development across the entire stack.</li>
+            </ul>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-head">
+              <div>
+                <span class="tl-role">Node.js Software Engineer</span>
+                <span class="tl-company">wappier · Athens</span>
+              </div>
+              <span class="tl-dates">Jan – Dec 2017</span>
+            </div>
+            <ul class="tl-bullets">
+              <li>Full-stack engineer on the MongoDB–Node–Angular stack, building cloud services for an Intelligent Revenue Management platform</li>
+            </ul>
+          </div>
+
+          <div class="tl-item">
+            <div class="tl-head">
+              <div>
+                <span class="tl-role">Front-End Developer</span>
+                <span class="tl-company">University of São Paulo – IPEN · Athens</span>
+              </div>
+              <span class="tl-dates">Sep 2015 – Dec 2016</span>
+            </div>
+            <ul class="tl-bullets">
+              <li>Built a scientific web app for crystal structure visualization using jQuery, RequireJS, and Bootstrap.</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── 4. ABOUT ME ──────────────────────────────────────────── -->
+      <div class="card card-about" data-reveal style="--d:3">
+        <h2 class="card-label">About</h2>
+        <p class="about-text">
+          I'm a software architect and principal engineer based in Athens. I've spent the last decade building SaaS products — owning the stack end to end, from database schema to deployment pipeline.
+        </p>
+        <p class="about-text">
+          I care deeply about simplicity: systems that are fast to reason about, safe to change, and built to last. I'm currently exploring neural networks and deep learning on the side.
+        </p>
+      </div>
+
+      <!-- ── 5. CONTACT LINK ──────────────────────────────────────── -->
+      <a href="/contact" class="card card-contact" data-reveal style="--d:4">
+        <span class="contact-label">Wanna get in touch?</span>
+        <div class="contact-cta">
+          <span class="contact-cta-text">Contact Me</span>
+          <span class="contact-arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- ── 6. FEATURED WORK ─────────────────────────────────────── -->
+      <a href="https://github.com/ekaratzaferis" target="_blank" rel="noopener" class="card card-work" data-reveal style="--d:5">
+        <h2 class="work-label">Featured Work</h2>
+        <div class="work-visual">
+          <div class="work-screen">
+            <div class="work-screen-bar">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="work-screen-body">
+              <div class="work-line w-80"></div>
+              <div class="work-line w-60"></div>
+              <div class="work-line w-90"></div>
+              <div class="work-line w-40"></div>
+              <div class="work-line w-70"></div>
+            </div>
+          </div>
+        </div>
+        <div class="work-footer">
+          <span>github.com/ekaratzaferis</span>
+          <span class="work-arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- ── 7. SKILLS / TOOLBOX ─────────────────────────────────── -->
+      <div class="card card-skills" data-reveal style="--d:6">
+        <h2 class="card-label">Toolbox</h2>
+        <div class="toolbox">
+          <div class="tool-box">Node.js</div>
+          <div class="tool-box">JS</div>
+          <div class="tool-box">React</div>
+          <div class="tool-box">MongoDB</div>
+          <div class="tool-box">REST</div>
+          <div class="tool-box">Cloud</div>
+          <div class="tool-box">Docker</div>
+          <div class="tool-box">Git</div>
+          <div class="tool-box">AI&nbsp;/&nbsp;LLM</div>
+          <div class="tool-box">SaaS</div>
+          <div class="tool-box">Arch.</div>
+          <div class="tool-box">Agile</div>
+        </div>
+      </div>
+
+      <!-- ── 8. EDUCATION + EXTRAS ──────────────────────────────── -->
+      <div class="card card-edu" data-reveal style="--d:7">
+
+        <section class="edu-block">
+          <h2 class="card-label">Education</h2>
+          <p class="edu-degree">Electronic &amp; Computer Engineering</p>
+          <p class="edu-school">Technical University of Crete</p>
+          <p class="edu-detail">B.Eng. · 2007 – 2015</p>
+        </section>
+
+        <section class="edu-block">
+          <h2 class="card-label" style="margin-top:1.5rem">Languages</h2>
+          <div class="lang-row">
+            <span class="lang-name">English</span>
+            <span class="lang-level">Bilingual</span>
+          </div>
+          <div class="lang-row">
+            <span class="lang-name">Greek</span>
+            <span class="lang-level">Native</span>
+          </div>
+        </section>
+
+        <section class="edu-block">
+          <h2 class="card-label" style="margin-top:1.5rem">Currently Exploring</h2>
+          <p class="explore-text">Neural networks &amp; deep learning</p>
+          <p class="explore-detail">architecture · training dynamics · backpropagation</p>
+        </section>
+
+      </div>
+
+    </div>
+  </main>
+</Base>
+
+<script>
+  const cards = document.querySelectorAll('[data-reveal]');
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.06, rootMargin: '0px 0px -20px 0px' }
+  );
+  cards.forEach((c) => io.observe(c));
+</script>
+
+<style>
+  /* ── Scroll ──────────────────────────────────────────────────────── */
+  :global(html), :global(body) { overflow: auto; height: auto; }
+
+  /* ── Back nav ────────────────────────────────────────────────────── */
+  .back-nav {
+    position: fixed;
+    top: 1.8rem;
+    left: 2rem;
+    z-index: 10;
+  }
+  .back-nav a {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #444;
+    transition: color 0.3s;
+  }
+  .back-nav a:hover { color: #f0f0f0; }
+
+  /* ── Page ────────────────────────────────────────────────────────── */
+  main {
+    padding: 4.5rem 1.25rem 4rem;
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  /* ── Grid ────────────────────────────────────────────────────────── */
+  .bento {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.6fr;
+    grid-template-areas:
+      "name     photo    exp"
+      "about    contact  exp"
+      "about    edu      exp"
+      "featured toolbox  exp";
+    gap: 10px;
+  }
+
+  .card-name    { grid-area: name; }
+  .card-photo   { grid-area: photo; }
+  .card-exp     { grid-area: exp; }
+  .card-about   { grid-area: about; }
+  .card-contact { grid-area: contact; }
+  .card-work    { grid-area: featured; }
+  .card-skills  { grid-area: toolbox; }
+  .card-edu     { grid-area: edu; }
+
+  /* ── Card base ───────────────────────────────────────────────────── */
+  .card {
+    background: #0c0c0c;
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity      0.55s ease calc(var(--d, 0) * 60ms),
+      transform    0.55s ease calc(var(--d, 0) * 60ms),
+      border-color 0.22s ease,
+      box-shadow   0.22s ease;
+  }
+
+  .card.visible { opacity: 1; transform: translateY(0); }
+
+  .card.visible:hover {
+    border-color: #2a2a2a;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+    transform: translateY(-4px);
+  }
+
+  /* ── Section label ───────────────────────────────────────────────── */
+  .card-label {
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 1.4rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  /* ── 1. Name card ────────────────────────────────────────────────── */
+  .card-name {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 160px;
+    background: #080808;
+    padding: 2rem 2.25rem;
+  }
+
+  .name-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: auto;
+  }
+
+  .name-text {
+    font-size: clamp(2.6rem, 5vw, 3.4rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #f0f0f0;
+    line-height: 1.05;
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .name-sub {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #666;
+  }
+
+  /* ── 2. Photo card ───────────────────────────────────────────────── */
+  .card-photo {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    min-height: 390px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a;
+  }
+
+  .photo-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% 10%;
+    border-radius: 11px;
+  }
+
+  .photo-fallback {
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #333;
+    user-select: none;
+    /* hidden when photo loads */
+  }
+
+  /* ── 3. Experience card ──────────────────────────────────────────── */
+  .card-exp {
+    padding: 2rem 2.25rem;
+  }
+
+  .tl {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+  }
+
+  .tl-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .tl-role {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: #e0e0e0;
+    margin-bottom: 0.2rem;
+  }
+
+  .tl-company {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  .tl-dates {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #666;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  .tl-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .tl-bullets li {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: #c0c0c0;
+    letter-spacing: 0.01em;
+    padding-left: 1.1rem;
+    position: relative;
+  }
+
+  .tl-bullets li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: #555;
+  }
+
+  /* ── 4. About card ───────────────────────────────────────────────── */
+  .card-about {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .about-text {
+    font-size: 0.97rem;
+    line-height: 1.8;
+    color: #c0c0c0;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── 5. Contact link card ────────────────────────────────────────── */
+  .card-contact {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    min-height: 160px;
+  }
+
+  .contact-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  .contact-cta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .contact-cta-text {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #e0e0e0;
+    transition: color 0.2s;
+  }
+
+  .card-contact:hover .contact-cta-text { color: #ffffff; }
+
+  .contact-arrow {
+    font-size: 1.6rem;
+    color: #555;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .card-contact:hover .contact-arrow {
+    color: #ccc;
+    transform: translate(3px, -3px);
+  }
+
+  /* ── 6. Featured work card ───────────────────────────────────────── */
+  .card-work {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.25rem;
+    cursor: pointer;
+    min-height: 200px;
+  }
+
+  .work-label {
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #e8e8e8;
+    transition: color 0.2s;
+  }
+
+  .card-work:hover .work-label { color: #ffffff; }
+
+  /* Fake laptop mockup */
+  .work-visual {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .work-screen {
+    width: 100%;
+    max-width: 200px;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .work-screen-bar {
+    display: flex;
+    gap: 4px;
+    padding: 6px 8px;
+    background: #181818;
+    border-bottom: 1px solid #222;
+  }
+
+  .work-screen-bar span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2a2a2a;
+  }
+
+  .work-screen-body {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .work-line {
+    height: 5px;
+    background: #222;
+    border-radius: 2px;
+  }
+  .w-80 { width: 80%; }
+  .w-60 { width: 60%; }
+  .w-90 { width: 90%; }
+  .w-40 { width: 40%; }
+  .w-70 { width: 70%; }
+
+  .work-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: #888;
+  }
+
+  .work-arrow {
+    font-size: 1.1rem;
+    transition: transform 0.2s, color 0.2s;
+  }
+
+  .card-work:hover .work-arrow {
+    transform: translate(3px, -3px);
+    color: #ccc;
+  }
+
+  /* ── 7. Skills / Toolbox card ────────────────────────────────────── */
+  .toolbox {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .tool-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    border: 1px solid #222;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #aaa;
+    background: #0a0a0a;
+    text-align: center;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+
+  .tool-box:hover {
+    border-color: #3a3a3a;
+    color: #f0f0f0;
+    background: #111;
+  }
+
+  /* ── 8. Education card ───────────────────────────────────────────── */
+  .card-edu {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .edu-block { flex-shrink: 0; }
+
+  .edu-degree {
+    font-size: 1rem;
+    color: #e0e0e0;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.3rem;
+  }
+
+  .edu-school {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 0.2rem;
+  }
+
+  .edu-detail {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #555;
+    font-style: italic;
+  }
+
+  .lang-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.42rem 0;
+    border-bottom: 1px solid #141414;
+  }
+  .lang-row:last-child { border-bottom: none; }
+
+  .lang-name {
+    font-size: 0.95rem;
+    color: #d0d0d0;
+    letter-spacing: 0.03em;
+  }
+
+  .lang-level {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #666;
+  }
+
+  .explore-text {
+    font-size: 0.97rem;
+    color: #d0d0d0;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.3rem;
+  }
+
+  .explore-detail {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: #666;
+    font-style: italic;
+  }
+
+  /* ── Responsive — tablet ──────────────────────────────────────────── */
+  @media (max-width: 860px) {
+    .bento {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "name     photo"
+        "about    contact"
+        "about    edu"
+        "exp      exp"
+        "featured toolbox";
+    }
+  }
+
+  /* ── Responsive — mobile ─────────────────────────────────────────── */
+  @media (max-width: 520px) {
+    .bento {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "name"
+        "photo"
+        "about"
+        "contact"
+        "exp"
+        "featured"
+        "toolbox"
+        "edu";
+    }
+
+    main { padding: 5rem 1rem 3rem; }
+    .card { padding: 1.5rem 1.5rem; }
+    .card-name { min-height: 200px; }
+    .card-photo { min-height: 280px; }
+    .card-contact { min-height: 140px; }
+  }
+</style>

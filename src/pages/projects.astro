@@ -1,0 +1,164 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/global.css';
+
+const projects = [];
+---
+
+<Base
+  title="Projects — Duditeria"
+  description="Open-source projects and experiments by Alexandros Karatzaferis."
+  canonical="https://duditeria.com/projects"
+>
+  <nav class="back-nav">
+    <a href="/">← Duditeria</a>
+  </nav>
+
+  <main>
+    <header class="page-header fade-in">
+      <h1>Projects</h1>
+      <p class="subtitle">Things I've built and shipped.</p>
+    </header>
+
+    {projects.length === 0 ? (
+      <p class="empty fade-in-delay">More coming soon.</p>
+    ) : (
+      <div class="grid fade-in-delay">
+        {projects.map((project) => (
+          <a href={`/projects/${project.slug}`} class="card">
+            <div class="card-inner">
+              <h2 class="card-title">{project.title}</h2>
+              <p class="card-desc">{project.description}</p>
+              <ul class="card-tags" aria-label="Technologies">
+                {project.tags.map((tag: string) => (
+                  <li>{tag}</li>
+                ))}
+              </ul>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </main>
+</Base>
+
+<style>
+  main {
+    position: relative;
+    z-index: 1;
+    min-height: 100dvh;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 7rem 2rem 4rem;
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .subtitle {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  .empty {
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    display: block;
+    background: #0c0c0c;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    transition: border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .card:hover {
+    border-color: #333;
+    background: #111;
+  }
+
+  .card-inner {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin-top: 0.5rem;
+  }
+
+  .card-tags li {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #555;
+    border: 1px solid #222;
+    border-radius: 2px;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .back-nav {
+    position: fixed;
+    top: 1.8rem;
+    left: 2rem;
+    z-index: 10;
+  }
+
+  .back-nav a {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color 0.25s ease;
+  }
+
+  .back-nav a:hover {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 520px) {
+    main {
+      padding: 6rem 1.25rem 3rem;
+    }
+  }
+</style>
