@@ -183,8 +183,21 @@ export function initStannisEngine(canvas) {
   const camera = new THREE.PerspectiveCamera(
     62, window.innerWidth / window.innerHeight, 0.1, 80,
   );
-  camera.position.set(7.29, 13.21, 6.19);
-  camera.lookAt(2.60, -0.25, 0.10);
+
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+  // Desktop position (production)
+  const DESKTOP_POS    = new THREE.Vector3(7.29, 13.21, 6.19);
+  const DESKTOP_TARGET = new THREE.Vector3(2.60, -0.25, 0.10);
+
+  // Mobile position
+  const MOBILE_POS    = new THREE.Vector3(3.12, 29.37, 0.10);
+  const MOBILE_TARGET = new THREE.Vector3(2.60, -0.25, 0.10);
+
+  const camPos    = isMobile ? MOBILE_POS    : DESKTOP_POS;
+  const camTarget = isMobile ? MOBILE_TARGET : DESKTOP_TARGET;
+  camera.position.copy(camPos);
+  camera.lookAt(camTarget);
 
   // ── Lighting ──────────────────────────────────────────────────────────────
   // Strong ambient so dark objects still read with 3-D shading, not as blobs.

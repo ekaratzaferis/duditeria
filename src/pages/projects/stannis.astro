@@ -95,11 +95,11 @@ import '../../styles/global.css';
 </Base>
 
 <style>
-  /* Allow scrolling on this page */
+  /* Allow scrolling on this page — !important beats global.css in the production bundle */
   :global(html),
   :global(body) {
-    overflow-y: auto;
-    height: auto;
+    overflow-y: auto !important;
+    height: auto !important;
   }
 
   /* ── Back nav ────────────────────────────────────────────────────── */
