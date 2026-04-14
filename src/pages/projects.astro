@@ -21,6 +21,12 @@ const projects = [
     description: 'Personal photography portfolio — travels, events, everyday life. Built with AI on top of Adobe Lightroom URLs.',
     tags: ['Personal', 'Photography', 'AI-built'],
   },
+  {
+    title: 'Cloud Terminal',
+    slug: 'fpga',
+    description: 'University thesis — FPGA thin client that replaces desktop hardware by bridging peripherals to a cloud server over Ethernet.',
+    tags: ['FPGA', 'Embedded', 'Networking', 'Thesis'],
+  },
 ];
 ---
 
@@ -63,6 +69,12 @@ const projects = [
 </Base>
 
 <style>
+  :global(html),
+  :global(body) {
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+
   main {
     position: relative;
     z-index: 1;

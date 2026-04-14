@@ -1,0 +1,308 @@
+---
+import Base from '../../layouts/Base.astro';
+import FpgaCanvas from '../../components/FpgaCanvas.astro';
+import '../../styles/global.css';
+---
+
+<Base
+  title="Cloud Terminal — Duditeria"
+  description="University thesis: an FPGA thin client that replaces your desktop hardware by bridging peripherals to a cloud server over Ethernet."
+  canonical="https://duditeria.com/projects/fpga"
+>
+  <header class="top-bar fade-in">
+    <a href="/projects" class="back-link">← Projects</a>
+    <span class="header-title">Cloud Terminal <span class="header-sub">/ University Thesis</span></span>
+  </header>
+
+  <!-- Scene -->
+  <section class="scene">
+    <FpgaCanvas />
+
+    <div class="scene-overlay fade-in">
+      <h1 class="title">Cloud Terminal</h1>
+      <p class="tagline">FPGA thin client — peripherals local, compute in the cloud</p>
+    </div>
+
+    <p class="scroll-hint fade-in-delay-2">scroll ↓</p>
+  </section>
+
+  <!-- Description -->
+  <section class="content">
+    <article>
+
+      <div class="block fade-up">
+        <h2>The idea</h2>
+        <p>
+          What if the computer on your desk wasn't really there?
+          This thesis replaces the CPU, RAM, and GPU in your home or office
+          with a cheap FPGA board and moves all the actual computing to a server
+          in the cloud — while your keyboard, mouse, and monitor stay exactly where they are.
+        </p>
+        <p>
+          The FPGA acts as a thin client: it captures keyboard and mouse events,
+          streams them over Ethernet to the server, and receives back the display
+          and audio output in real time. From the user's perspective, it's just a computer.
+        </p>
+      </div>
+
+      <div class="block fade-up">
+        <h2>Architecture</h2>
+        <ul class="nodes">
+          <li>
+            <span class="node-name">FPGA</span>
+            <span class="node-desc">Captures peripheral input (keyboard, mouse) and drives display/audio output. Acts as the hardware bridge at the user's end.</span>
+          </li>
+          <li>
+            <span class="node-name">Ethernet</span>
+            <span class="node-desc">Bidirectional channel. Input events travel to the server; rendered frames and audio travel back.</span>
+          </li>
+          <li>
+            <span class="node-name">Cloud server</span>
+            <span class="node-desc">C# application that simulates the incoming peripheral events and streams the resulting display output back to the FPGA.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="block fade-up">
+        <h2>Why it matters</h2>
+        <ul class="traits">
+          <li>Eliminates expensive general-purpose hardware at the endpoint</li>
+          <li>FPGA is purpose-built for I/O — efficient, low-latency, low-power</li>
+          <li>Cloud hardware can be upgraded without touching the client device</li>
+          <li>Applicable to IoT, embedded systems, and thin-client infrastructure</li>
+          <li>Hardware-software co-design: C# on the server, RTL/HDL on the FPGA</li>
+        </ul>
+      </div>
+
+      <div class="block fade-up">
+        <h2>Context</h2>
+        <p>
+          Final-year thesis for a B.Eng. in Electronic &amp; Computer Engineering
+          at the Technical University of Crete. The project spans embedded systems,
+          real-time networking, hardware description languages, and systems programming.
+        </p>
+      </div>
+
+      <div class="block fade-up">
+        <a
+          href="https://github.com/ekaratzaferis/fpga_clould_client"
+          class="gh-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on GitHub →
+        </a>
+      </div>
+
+    </article>
+  </section>
+</Base>
+
+<style>
+  :global(html),
+  :global(body) {
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+
+  /* ── Top bar ─────────────────────────────────────────────────────── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 3rem;
+    padding: 0 2rem;
+    background: #000;
+    border-bottom: 1px solid #1a1a1a;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .back-link {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #888;
+    white-space: nowrap;
+    transition: color 0.25s ease;
+  }
+
+  .back-link:hover { color: #ccc; }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .header-sub { color: #444; }
+
+  /* ── Scene ───────────────────────────────────────────────────────── */
+  .scene {
+    position: relative;
+    width: 100%;
+    height: calc(100dvh - 3rem);
+    overflow: hidden;
+  }
+
+  .scene-overlay {
+    position: absolute;
+    bottom: 5rem;
+    left: 2.5rem;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 7vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    text-shadow:
+      0 0 20px rgba(255, 255, 255, 0.12),
+      0 0 40px rgba(255, 255, 255, 0.06);
+  }
+
+  .tagline {
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-indent: 0.42em;
+    color: #fff;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── Content ─────────────────────────────────────────────────────── */
+  .content {
+    background: #000;
+    padding: 6rem 2rem 8rem;
+  }
+
+  article {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .block h2 {
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .block p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #b0b0b0;
+    letter-spacing: 0.02em;
+  }
+
+  .block p + p { margin-top: 1rem; }
+
+  /* Architecture list */
+  .nodes {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .nodes li {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 1.5rem;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-bottom: 1px solid #111;
+  }
+
+  .nodes li:first-child { border-top: 1px solid #111; }
+
+  .node-name {
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .node-desc {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  /* Traits list */
+  .traits {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .traits li {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #b0b0b0;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .traits li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: #333;
+  }
+
+  /* GitHub link */
+  .gh-link {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid #222;
+    border-radius: 2px;
+    padding: 0.65rem 1.25rem;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .gh-link:hover {
+    color: var(--text-primary);
+    border-color: #444;
+  }
+
+  /* Responsive */
+  @media (max-width: 520px) {
+    .scene-overlay { bottom: 5.5rem; left: 1.5rem; }
+    .content       { padding: 4rem 1.25rem 6rem; }
+    .nodes li      { grid-template-columns: 1fr; gap: 0.35rem; }
+    .tagline       { font-size: 0.58rem; letter-spacing: 0.1em; }
+  }
+</style>

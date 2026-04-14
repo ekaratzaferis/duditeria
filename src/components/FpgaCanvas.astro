@@ -1,0 +1,30 @@
+---
+---
+
+<canvas id="fpga-canvas"></canvas>
+
+<script>
+  import { initFpgaEngine } from '../scripts/fpga-engine.js';
+
+  const canvas = document.getElementById('fpga-canvas');
+  if (canvas) {
+    try {
+      const dispose = initFpgaEngine(canvas);
+      window.addEventListener('beforeunload', dispose, { once: true });
+    } catch (err) {
+      console.error('[fpga-engine] init failed:', err);
+    }
+  }
+</script>
+
+<style>
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    display: block;
+    touch-action: pan-y;
+  }
+</style>
