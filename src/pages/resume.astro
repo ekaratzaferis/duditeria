@@ -8,9 +8,10 @@ import '../styles/global.css';
   description="Software Architect and Principal Engineer with 10+ years building scalable SaaS systems."
   canonical="https://duditeria.com/resume"
 >
-  <nav class="back-nav">
-    <a href="/">← Duditeria</a>
-  </nav>
+  <header class="top-bar fade-in">
+    <a href="/" class="back-link">← Duditeria</a>
+    <span class="header-title">Resume</span>
+  </header>
 
   <main>
     <div class="bento">
@@ -212,25 +213,44 @@ import '../styles/global.css';
   /* ── Scroll ──────────────────────────────────────────────────────── */
   :global(html), :global(body) { overflow: auto; height: auto; }
 
-  /* ── Back nav ────────────────────────────────────────────────────── */
-  .back-nav {
-    position: fixed;
-    top: 1.8rem;
-    left: 2rem;
+  /* ── Top bar ─────────────────────────────────────────────────────── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 3rem;
+    padding: 0 2rem;
+    background: #000;
+    border-bottom: 1px solid #1a1a1a;
+    position: sticky;
+    top: 0;
     z-index: 10;
   }
-  .back-nav a {
-    font-size: 0.62rem;
-    letter-spacing: 0.2em;
+
+  .back-link {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #444;
-    transition: color 0.3s;
+    color: #888;
+    white-space: nowrap;
+    transition: color 0.25s ease;
   }
-  .back-nav a:hover { color: #f0f0f0; }
+
+  .back-link:hover {
+    color: #ccc;
+  }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
 
   /* ── Page ────────────────────────────────────────────────────────── */
   main {
-    padding: 4.5rem 1.25rem 4rem;
+    padding: 1.5rem 1.25rem 4rem;
     max-width: 1160px;
     margin: 0 auto;
   }

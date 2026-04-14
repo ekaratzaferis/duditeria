@@ -18,9 +18,10 @@ import '../styles/global.css';
     }
   </script>
 
-  <nav class="lab-nav">
-    <a href="/">← Duditeria</a>
-  </nav>
+  <header class="top-bar">
+    <a href="/" class="back-link">← Duditeria</a>
+    <span class="header-title">Lab</span>
+  </header>
 </Base>
 
 <style>
@@ -34,25 +35,42 @@ import '../styles/global.css';
     display: block;
   }
 
-  .lab-nav {
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 3rem;
+    padding: 0 2rem;
+    background: rgba(0, 0, 0, 0.6);
+    border-bottom: 1px solid #1a1a1a;
     position: fixed;
-    top: 1.8rem;
-    left: 2rem;
-    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
-  .lab-nav a {
-    font-family: 'Roboto Condensed', system-ui, sans-serif;
-    font-size: 0.62rem;
-    font-weight: 400;
-    letter-spacing: 0.2em;
+  .back-link {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #555;
+    color: #888;
+    white-space: nowrap;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.25s ease;
   }
 
-  .lab-nav a:hover {
+  .back-link:hover {
+    color: #ccc;
+  }
+
+  .header-title {
+    font-family: 'Roboto Condensed', system-ui, sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     color: #f0f0f0;
   }
 </style>

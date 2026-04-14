@@ -8,9 +8,10 @@ import '../styles/global.css';
   description="Get in touch with Alexandros Karatzaferis — Software Architect and Principal Engineer."
   canonical="https://duditeria.com/contact"
 >
-  <nav class="back-nav">
-    <a href="/">← Duditeria</a>
-  </nav>
+  <header class="top-bar fade-in">
+    <a href="/" class="back-link">← Duditeria</a>
+    <span class="header-title">Contact</span>
+  </header>
 
   <main>
     <div class="contact-wrap">
@@ -80,32 +81,46 @@ import '../styles/global.css';
     height: auto;
   }
 
-  .back-nav {
-    position: fixed;
-    top: 1.8rem;
-    left: 2rem;
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 3rem;
+    padding: 0 2rem;
+    background: #000;
+    border-bottom: 1px solid #1a1a1a;
+    position: sticky;
+    top: 0;
     z-index: 10;
   }
 
-  .back-nav a {
-    font-size: 0.62rem;
-    font-weight: 400;
-    letter-spacing: 0.2em;
+  .back-link {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #444;
-    transition: color 0.3s;
+    color: #888;
+    white-space: nowrap;
+    transition: color 0.25s ease;
   }
 
-  .back-nav a:hover {
-    color: #f0f0f0;
+  .back-link:hover {
+    color: #ccc;
+  }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-primary);
   }
 
   main {
-    min-height: 100dvh;
+    min-height: calc(100dvh - 3rem);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6rem 2rem;
+    padding: 3rem 2rem;
   }
 
   .contact-wrap {

@@ -1,26 +1,32 @@
 ---
 import Base from '../../layouts/Base.astro';
-import StannisCanvas from '../../components/StannisCanvas.astro';
 import '../../styles/global.css';
 ---
 
 <Base
-  title="Stannis — Duditeria"
-  description="Stannis is a finite state machine workflow engine for serverless Node.js. Durable, storage-agnostic, zero dependencies."
-  canonical="https://duditeria.com/projects/stannis"
+  title="Fretboard — Duditeria"
+  description="A personal guitar fretboard tool built quickly with LLMs — visualise scales, modes, and chord shapes across the neck."
+  canonical="https://duditeria.com/projects/fretboard"
 >
+  <!-- Top bar: back nav + title -->
   <header class="top-bar fade-in">
     <a href="/projects" class="back-link">← Projects</a>
-    <span class="header-title">Stannis <span class="header-sub">/ FSM workflow engine for Node.js</span></span>
+    <span class="header-title">Fretboard <span class="header-sub">/ Guitar fretboard visualiser</span></span>
   </header>
 
-  <!-- Section 1: Immersive ThreeJS scene -->
+  <!-- Section 1: Embedded app -->
   <section class="scene">
-    <StannisCanvas />
+    <iframe
+      src="https://ekaratzaferis.github.io/fretboard/"
+      title="Fretboard app"
+      class="embed"
+      loading="lazy"
+      allowfullscreen
+    ></iframe>
 
     <div class="scene-overlay fade-in">
-      <h1 class="title">Stannis</h1>
-      <p class="tagline">FSM workflow engine for Node.js</p>
+      <h1 class="title">Fretboard</h1>
+      <p class="tagline">Guitar fretboard visualiser</p>
     </div>
 
     <p class="scroll-hint fade-in-delay-2">scroll ↓</p>
@@ -32,58 +38,43 @@ import '../../styles/global.css';
       <div class="block fade-up">
         <h2>What is it</h2>
         <p>
-          Stannis is a finite state machine workflow engine built for serverless Node.js.
-          It lets you define multi-step flows that survive process restarts, scale across
-          distributed workers, and resume from any point — without vendor lock-in or
-          runtime dependencies.
+          A personal guitar fretboard tool I built for myself — to quickly visualise scales,
+          modes, and chord shapes across the neck without hunting through tab sites or
+          theory books.
         </p>
         <p>
-          Think AWS Step Functions, but as a plain JavaScript library you own and run anywhere.
-          State persists through a two-method storage adapter — Redis, DynamoDB, in-memory,
-          or anything you wire up.
+          Not a product. Not polished for an audience. Just a piece of software that
+          does exactly what I need, the way I want it, nothing more.
         </p>
       </div>
 
       <div class="block fade-up">
-        <h2>Node types</h2>
-        <ul class="nodes">
-          <li>
-            <span class="node-name">Task</span>
-            <span class="node-desc">A sequential work unit. Imports and runs an external module.</span>
-          </li>
-          <li>
-            <span class="node-name">Sequence</span>
-            <span class="node-desc">Runs child nodes one after another, in order.</span>
-          </li>
-          <li>
-            <span class="node-name">Parallel</span>
-            <span class="node-desc">Fans out to all branches concurrently. Waits for every branch to complete before continuing.</span>
-          </li>
-          <li>
-            <span class="node-name">Race</span>
-            <span class="node-desc">Fans out to all branches. The first to complete wins; the rest are abandoned.</span>
-          </li>
-          <li>
-            <span class="node-name">Decision</span>
-            <span class="node-desc">Evaluates a condition and routes execution to exactly one branch.</span>
-          </li>
-        </ul>
+        <h2>How it was built</h2>
+        <p>
+          This is an example of what AI-assisted development actually looks like in
+          practice — a real use case, a clear mental model, and a few focused prompts.
+          The result is a working tool in the time it would have taken to configure
+          someone else's app to my liking.
+        </p>
+        <p>
+          No framework sprawl. No dependencies I don't understand. Just the thing I
+          needed, built to my taste, owned entirely.
+        </p>
       </div>
 
       <div class="block fade-up">
-        <h2>Key traits</h2>
+        <h2>Why it matters</h2>
         <ul class="traits">
-          <li>Durable across serverless cold starts and process restarts</li>
-          <li>Storage-agnostic — bring your own adapter</li>
-          <li>Resumable via continuation tokens for human-in-the-loop flows</li>
-          <li>Zero runtime dependencies — plain JavaScript, JSDoc-typed</li>
-          <li>Node.js 20+</li>
+          <li>Solves a real personal problem — not a demo or toy project</li>
+          <li>Built fast with LLMs, but shaped by genuine intent</li>
+          <li>A reminder that software can still be personal and small</li>
+          <li>You don't need a team or months of work to own your tools</li>
         </ul>
       </div>
 
       <div class="block fade-up">
         <a
-          href="https://github.com/ekaratzaferis/stannis"
+          href="https://github.com/ekaratzaferis/fretboard"
           class="gh-link"
           target="_blank"
           rel="noopener noreferrer"
@@ -96,7 +87,6 @@ import '../../styles/global.css';
 </Base>
 
 <style>
-  /* Allow scrolling on this page — !important beats global.css in the production bundle */
   :global(html),
   :global(body) {
     overflow-y: auto !important;
@@ -150,6 +140,15 @@ import '../../styles/global.css';
     overflow: hidden;
   }
 
+  .embed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
   .scene-overlay {
     position: absolute;
     bottom: 5rem;
@@ -164,10 +163,10 @@ import '../../styles/global.css';
     font-weight: 300;
     letter-spacing: 0.32em;
     text-transform: uppercase;
-    color: var(--text-primary);
+    color: #fff;
     text-shadow:
-      0 0 20px rgba(255, 255, 255, 0.12),
-      0 0 40px rgba(255, 255, 255, 0.06);
+      0 0 20px rgba(0, 0, 0, 0.6),
+      0 2px 8px rgba(0, 0, 0, 0.8);
   }
 
   .tagline {
@@ -177,6 +176,7 @@ import '../../styles/global.css';
     text-transform: uppercase;
     text-indent: 0.42em;
     color: #fff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
   }
 
   .scroll-hint {
@@ -187,9 +187,10 @@ import '../../styles/global.css';
     font-size: 0.58rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: #fff;
     opacity: 0.5;
     pointer-events: none;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
   }
 
   /* ── Section 2: Content ──────────────────────────────────────────── */
@@ -225,41 +226,6 @@ import '../../styles/global.css';
 
   .block p + p {
     margin-top: 1rem;
-  }
-
-  /* Node types list */
-  .nodes {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .nodes li {
-    display: grid;
-    grid-template-columns: 6rem 1fr;
-    gap: 1.5rem;
-    align-items: baseline;
-    padding: 1rem 0;
-    border-bottom: 1px solid #111;
-  }
-
-  .nodes li:first-child {
-    border-top: 1px solid #111;
-  }
-
-  .node-name {
-    font-size: 0.7rem;
-    font-weight: 400;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--text-primary);
-  }
-
-  .node-desc {
-    font-size: 0.82rem;
-    line-height: 1.6;
-    color: var(--text-muted);
   }
 
   /* Key traits list */
@@ -312,11 +278,6 @@ import '../../styles/global.css';
 
     .content {
       padding: 4rem 1.25rem 6rem;
-    }
-
-    .nodes li {
-      grid-template-columns: 1fr;
-      gap: 0.35rem;
     }
   }
 </style>

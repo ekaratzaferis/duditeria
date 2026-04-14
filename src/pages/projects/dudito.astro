@@ -1,0 +1,359 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/global.css';
+---
+
+<Base
+  title="Dudito — Duditeria"
+  description="A personal photography portfolio built with AI — travel, events, everyday life. Powered by Adobe Lightroom URLs, styled entirely on my own terms."
+  canonical="https://duditeria.com/projects/dudito"
+>
+  <header class="top-bar fade-in">
+    <a href="/projects" class="back-link">← Projects</a>
+    <span class="header-title">Dudito <span class="header-sub">/ Photography portfolio</span></span>
+  </header>
+
+  <!-- Section 1: Embedded portfolio -->
+  <section class="scene">
+    <iframe
+      id="dudito-frame"
+      src="https://dudito.com"
+      title="Dudito photography portfolio"
+      class="embed"
+      loading="lazy"
+      allowfullscreen
+    ></iframe>
+
+    <!-- Transparent overlay — blocks all mouse events on the iframe -->
+    <div class="iframe-mask"></div>
+
+    <div class="scene-overlay fade-in">
+      <h1 class="title">Dudito</h1>
+      <p class="tagline">Photography portfolio</p>
+    </div>
+
+    <!-- Play / stop tour button -->
+    <button class="tour-btn fade-in-delay-2" id="tour-btn" aria-label="Start portfolio tour">
+      <span class="tour-icon" id="tour-icon">▶</span>
+      <span class="tour-label" id="tour-label">Start tour</span>
+    </button>
+
+    <p class="scroll-hint fade-in-delay-2">scroll ↓</p>
+  </section>
+
+  <!-- Section 2: Description -->
+  <section class="content">
+    <article>
+      <div class="block fade-up">
+        <h2>What is it</h2>
+        <p>
+          A photography portfolio for my travels, events, and everyday life.
+          Built because Adobe Lightroom's built-in web gallery gives me no
+          control over ordering, styling, or how the photos are presented.
+        </p>
+        <p>
+          So I built my own — one that pulls directly from Lightroom's album
+          and photo URLs and presents everything exactly the way I want it.
+        </p>
+      </div>
+
+      <div class="block fade-up">
+        <h2>How it was built</h2>
+        <p>
+          Designed and generated with Claude Code. I described what I wanted —
+          the layout, the navigation, the EXIF panel, the map — and the AI
+          translated it into a working Astro site in a fraction of the time
+          it would have taken to hand-code or configure an existing tool.
+        </p>
+        <p>
+          The source photos stay in Lightroom. The portfolio just consumes
+          the public CDN URLs Adobe exposes, so there's no sync step and
+          no duplication of assets.
+        </p>
+      </div>
+
+      <div class="block fade-up">
+        <h2>Features</h2>
+        <ul class="traits">
+          <li>Album grid organised by year, browsable from a collapsible side panel</li>
+          <li>Full-resolution photo view with zoom and pan</li>
+          <li>EXIF metadata panel — camera, lens, settings, date</li>
+          <li>Reverse geocoding and mini map for geotagged shots</li>
+          <li>Autoplay slideshow with fullscreen support</li>
+          <li>Keyboard navigation (← →) between photos</li>
+        </ul>
+      </div>
+
+      <div class="block fade-up">
+        <a
+          href="https://github.com/ekaratzaferis/dudito"
+          class="gh-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on GitHub →
+        </a>
+      </div>
+    </article>
+  </section>
+</Base>
+
+<script>
+  const iframe  = document.getElementById('dudito-frame') as HTMLIFrameElement | null
+  const btn     = document.getElementById('tour-btn')
+  const icon    = document.getElementById('tour-icon')
+  const label   = document.getElementById('tour-label')
+
+  let playing = false
+
+  function setPlaying(val: boolean) {
+    playing = val
+    if (icon)  icon.textContent  = val ? '■' : '▶'
+    if (label) label.textContent = val ? 'Stop tour' : 'Start tour'
+    if (btn)   btn.classList.toggle('active', val)
+  }
+
+  btn?.addEventListener('click', () => {
+    const next = !playing
+    setPlaying(next)
+    iframe?.contentWindow?.postMessage(
+      { action: next ? 'start-tour' : 'stop-tour' },
+      'https://dudito.com'
+    )
+  })
+</script>
+
+<style>
+  :global(html),
+  :global(body) {
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+
+  /* ── Top bar ─────────────────────────────────────────────────────── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 3rem;
+    padding: 0 2rem;
+    background: #000;
+    border-bottom: 1px solid #1a1a1a;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .back-link {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #888;
+    white-space: nowrap;
+    transition: color 0.25s ease;
+  }
+
+  .back-link:hover { color: #ccc; }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .header-sub { color: #444; }
+
+  /* ── Scene ───────────────────────────────────────────────────────── */
+  .scene {
+    position: relative;
+    width: 100%;
+    height: calc(100dvh - 3rem);
+    overflow: hidden;
+  }
+
+  .embed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* Sits on top of the iframe and eats all pointer events */
+  .iframe-mask {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    cursor: default;
+  }
+
+  /* ── Title / tagline overlay ─────────────────────────────────────── */
+  .scene-overlay {
+    position: absolute;
+    bottom: 5rem;
+    left: 2.5rem;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 7vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow:
+      0 0 20px rgba(0, 0, 0, 0.6),
+      0 2px 8px rgba(0, 0, 0, 0.8);
+  }
+
+  .tagline {
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-indent: 0.42em;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  }
+
+  /* ── Tour button ─────────────────────────────────────────────────── */
+  .tour-btn {
+    position: absolute;
+    bottom: 4.6rem;
+    right: 2.5rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    padding: 0.55rem 1rem;
+    color: #fff;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .tour-btn:hover {
+    background: rgba(0, 0, 0, 0.75);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .tour-btn.active {
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(20, 20, 20, 0.7);
+  }
+
+  .tour-icon {
+    font-size: 0.65rem;
+    line-height: 1;
+  }
+
+  .tour-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* ── Scroll hint ─────────────────────────────────────────────────── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 2;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  }
+
+  /* ── Content ─────────────────────────────────────────────────────── */
+  .content {
+    background: #000;
+    padding: 6rem 2rem 8rem;
+  }
+
+  article {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .block h2 {
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .block p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #b0b0b0;
+    letter-spacing: 0.02em;
+  }
+
+  .block p + p { margin-top: 1rem; }
+
+  .traits {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .traits li {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #b0b0b0;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .traits li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: #333;
+  }
+
+  .gh-link {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid #222;
+    border-radius: 2px;
+    padding: 0.65rem 1.25rem;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .gh-link:hover {
+    color: var(--text-primary);
+    border-color: #444;
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────────── */
+  @media (max-width: 520px) {
+    .scene-overlay { bottom: 5.5rem; left: 1.5rem; }
+    .tour-btn      { bottom: 5.2rem; right: 1.5rem; }
+    .content       { padding: 4rem 1.25rem 6rem; }
+  }
+</style>
