@@ -29,7 +29,7 @@ import '../../styles/global.css';
           <button id="mode-text" class="tab-btn active">Text</button>
           <button id="mode-draw" class="tab-btn">Draw</button>
         </div>
-        <button id="invert-btn" class="invert-btn">Invert</button>
+        <button id="invert-btn" class="invert-btn" style="display:none">Invert</button>
       </div>
 
       <!-- Panel body: two columns (input | svg preview) -->
@@ -40,7 +40,7 @@ import '../../styles/global.css';
             <input
               id="text-input"
               type="text"
-              value="FOUR20"
+              value="LBJ"
               class="text-input"
               autocomplete="off"
               spellcheck="false"
@@ -254,7 +254,7 @@ import '../../styles/global.css';
   .controls-panel {
     position: absolute;
     bottom: 2.5rem;
-    left: 50%;
+    right: 2%;
     transform: translateX(-50%);
     width: min(580px, calc(100% - 2rem));
     background: rgba(0, 0, 0, 0.82);
@@ -455,7 +455,9 @@ import '../../styles/global.css';
   .scroll-hint {
     position: absolute;
     bottom: 1rem;
-    left: 50%;
+    width: 100%;
+    text-align: center;
+    /* left: 50%; */
     transform: translateX(-50%);
     font-size: 0.58rem;
     letter-spacing: 0.22em;
@@ -555,7 +557,14 @@ import '../../styles/global.css';
     }
 
     .controls-panel {
-      bottom: 2rem;
+      position: absolute;
+      top: auto;
+      /* bottom: 1rem; */
+      left: 0%;
+      width: 100%;
+      transform: translateX(-50%);
+      max-height: calc(100dvh - 3rem - 2rem);
+      overflow-y: auto;
     }
 
     .panel-body {
@@ -570,6 +579,7 @@ import '../../styles/global.css';
 
     .col-svg {
       min-height: 80px;
+      display: none;
     }
 
     .content {

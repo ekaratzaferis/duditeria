@@ -39,7 +39,7 @@ export async function initFour20Engine(canvas, refs) {
   // ─── Renderer ──────────────────────────────────────────────────────────────
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x071a0d, 1); // dark green background
+  renderer.setClearColor(0x7b3fa8, 1); // Lakers purple (lightened)
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.2;
 
@@ -48,17 +48,17 @@ export async function initFour20Engine(canvas, refs) {
   const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100000);
 
   // ─── Lights ────────────────────────────────────────────────────────────────
-  scene.add(new THREE.AmbientLight(0xaaffcc, 0.35));
+  scene.add(new THREE.AmbientLight(0xffeebb, 0.45));
 
-  const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+  const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);
   keyLight.position.set(200, 400, 300);
   scene.add(keyLight);
 
-  const rimLight = new THREE.DirectionalLight(0x44ffaa, 0.7);
+  const rimLight = new THREE.DirectionalLight(0xcc99ff, 0.7);
   rimLight.position.set(-300, -100, 100);
   scene.add(rimLight);
 
-  const fillLight = new THREE.DirectionalLight(0x002200, 0.4);
+  const fillLight = new THREE.DirectionalLight(0x331a00, 0.4);
   fillLight.position.set(0, -400, -200);
   scene.add(fillLight);
 
@@ -143,12 +143,12 @@ export async function initFour20Engine(canvas, refs) {
 
   // ─── Material ──────────────────────────────────────────────────────────────
   const sharedMat = new THREE.MeshPhysicalMaterial({
-    color: 0xff69b4,
-    emissive: 0x1a0010,
-    metalness: 0.75,
-    roughness: 0.2,
+    color: 0xffe566,
+    emissive: 0x554400,
+    metalness: 0.6,
+    roughness: 0.08,
     clearcoat: 1.0,
-    clearcoatRoughness: 0.1,
+    clearcoatRoughness: 0.08,
     side: THREE.DoubleSide,
   });
 
@@ -200,7 +200,9 @@ export async function initFour20Engine(canvas, refs) {
     const fov = camera.fov * (Math.PI / 180);
     const dist = (sphere.radius / Math.sin(fov / 2)) * 1.3;
 
-    camera.position.set(dist * 0.45, dist * 0.38, dist);
+    const isMobile = window.innerWidth <= 520;
+    const zoomOut = isMobile ? 1.9 : 1.0;
+    camera.position.set(dist * 0.45 * zoomOut, dist * 0.38 * zoomOut, dist * zoomOut);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
 
@@ -230,7 +232,7 @@ export async function initFour20Engine(canvas, refs) {
   let textTimer;
 
   async function runText() {
-    const text = refs.textInput?.value?.trim() || 'FOUR20';
+    const text = refs.textInput?.value?.trim() || 'LBJ';
     const fontFamily = refs.fontSelect?.value || 'Permanent Marker';
     try {
       const result = await renderTextToSVG(text, fontFamily, inverted);
