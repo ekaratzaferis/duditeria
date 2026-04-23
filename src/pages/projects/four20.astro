@@ -1,0 +1,579 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/global.css';
+---
+
+<Base
+  title="four20 — Duditeria"
+  description="four20 is a browser-based SVG tracing library that converts raster images and freehand drawings into clean vector paths — with correct winding order for Three.js extrusion."
+  canonical="https://duditeria.com/projects/four20"
+>
+  <header class="top-bar fade-in">
+    <a href="/projects" class="back-link">← Projects</a>
+    <span class="header-title">four20 <span class="header-sub">/ raster → svg → 3d</span></span>
+  </header>
+
+  <!-- Scene: Three.js canvas + controls overlay -->
+  <section class="scene">
+    <canvas id="four20-canvas"></canvas>
+
+    <div class="scene-overlay fade-in">
+      <h1 class="title">four20</h1>
+      <p class="tagline">raster → svg → 3d</p>
+    </div>
+
+    <div class="controls-panel fade-in-delay">
+      <!-- Panel header: mode tabs + invert -->
+      <div class="panel-header">
+        <div class="mode-tabs">
+          <button id="mode-text" class="tab-btn active">Text</button>
+          <button id="mode-draw" class="tab-btn">Draw</button>
+        </div>
+        <button id="invert-btn" class="invert-btn">Invert</button>
+      </div>
+
+      <!-- Panel body: two columns (input | svg preview) -->
+      <div class="panel-body">
+        <!-- Left: input controls -->
+        <div class="col-input">
+          <div id="text-controls" class="input-section">
+            <input
+              id="text-input"
+              type="text"
+              value="FOUR20"
+              class="text-input"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <select id="font-select" class="font-select">
+              <option value="Arial">Arial</option>
+              <option value="Impact">Impact</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Bebas Neue">Bebas Neue</option>
+              <option value="Anton">Anton</option>
+              <option value="Abril Fatface">Abril Fatface</option>
+              <option value="Pacifico">Pacifico</option>
+              <option value="Permanent Marker" selected>Permanent Marker</option>
+              <option value="Roboto Condensed">Roboto Condensed</option>
+            </select>
+          </div>
+
+          <div id="draw-controls" class="input-section hidden">
+            <canvas id="draw-canvas" class="draw-pad"></canvas>
+            <button id="clear-btn" class="clear-btn">Clear</button>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="col-divider"></div>
+
+        <!-- Right: SVG preview -->
+        <div class="col-svg">
+          <span class="col-label">SVG</span>
+          <div id="svg-preview" class="svg-preview"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="scroll-hint fade-in-delay-2">scroll ↓</p>
+  </section>
+
+  <!-- Content -->
+  <section class="content">
+    <article>
+      <div class="block fade-up">
+        <h2>What is it</h2>
+        <p>
+          four20 is a browser-based SVG tracing library that converts raster images and text
+          into clean, scalable vector paths. It's built on Peter Selinger's potrace algorithm —
+          the same foundation behind Inkscape's bitmap tracing — extended with path
+          post-processing and typographic utilities.
+        </p>
+        <p>
+          Type something above, pick a font, and watch it trace to SVG in real time.
+          Or switch to draw mode and sketch anything freehand.
+        </p>
+      </div>
+
+      <div class="block fade-up">
+        <h2>Why it exists</h2>
+        <p>
+          Three.js can extrude any 2D shape into a 3D solid via <code>ExtrudeGeometry</code>.
+          But it requires outer paths to wind clockwise and holes to wind counter-clockwise —
+          otherwise faces invert, surfaces disappear, and the geometry breaks.
+        </p>
+        <p>
+          Every potrace port I found at the time outputs paths in arbitrary winding order.
+          four20 runs a geometric post-pass that detects containment relationships between
+          paths and re-orders winding so the output is always compatible with Three.js — no
+          manual cleanup, no special cases.
+        </p>
+      </div>
+
+      <div class="block fade-up">
+        <h2>How it works</h2>
+        <ul class="traits">
+          <li>Raster input is traced using the potrace algorithm — a sequence of thinning, polygon fitting, and curve optimisation steps that finds the minimal set of Bézier curves describing each shape boundary</li>
+          <li>SVG output paths are analysed with point-in-polygon tests to determine which paths contain which</li>
+          <li>Containment depth determines winding: even depth → clockwise (outer), odd depth → counter-clockwise (hole)</li>
+          <li>Text is rendered to a canvas using the browser font engine, then the pixel data is fed to the tracer — any web font works</li>
+        </ul>
+      </div>
+
+      <div class="block fade-up">
+        <a
+          href="https://github.com/ekaratzaferis/four20"
+          class="gh-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on GitHub →
+        </a>
+      </div>
+    </article>
+  </section>
+</Base>
+
+<script>
+  import { initFour20Engine } from '../../scripts/four20-engine.js';
+
+  const canvas = document.getElementById('four20-canvas') as HTMLCanvasElement;
+  if (canvas) {
+    initFour20Engine(canvas, {
+      textInput:    document.getElementById('text-input') as HTMLInputElement,
+      fontSelect:   document.getElementById('font-select') as HTMLSelectElement,
+      invertBtn:    document.getElementById('invert-btn') as HTMLButtonElement,
+      modeTextBtn:  document.getElementById('mode-text') as HTMLButtonElement,
+      modeDrawBtn:  document.getElementById('mode-draw') as HTMLButtonElement,
+      textControls: document.getElementById('text-controls') as HTMLElement,
+      drawControls: document.getElementById('draw-controls') as HTMLElement,
+      drawCanvas:   document.getElementById('draw-canvas') as HTMLCanvasElement,
+      clearBtn:     document.getElementById('clear-btn') as HTMLButtonElement,
+      svgPreview:   document.getElementById('svg-preview') as HTMLElement,
+    }).then(dispose => {
+      window.addEventListener('beforeunload', dispose, { once: true });
+    }).catch(err => {
+      console.error('[four20-engine] init failed:', err);
+    });
+  }
+</script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Abril+Fatface&family=Pacifico&family=Anton&family=Permanent+Marker&display=swap');
+
+  :global(html),
+  :global(body) {
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+
+  /* ── Top bar ─────────────────────────────────────────────────────── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 3rem;
+    padding: 0 2rem;
+    background: #000;
+    border-bottom: 1px solid #1a1a1a;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .back-link {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #888;
+    white-space: nowrap;
+    transition: color 0.25s ease;
+  }
+
+  .back-link:hover { color: #ccc; }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .header-sub { color: #444; }
+
+  /* ── Scene ───────────────────────────────────────────────────────── */
+  .scene {
+    position: relative;
+    width: 100%;
+    height: calc(100dvh - 3rem);
+    overflow: hidden;
+  }
+
+  #four20-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    display: block;
+    touch-action: pan-y;
+  }
+
+  /* ── Scene overlay (title) ───────────────────────────────────────── */
+  .scene-overlay {
+    position: absolute;
+    bottom: 5rem;
+    left: 2.5rem;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 7vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    text-shadow:
+      0 0 20px rgba(255, 255, 255, 0.12),
+      0 0 40px rgba(255, 255, 255, 0.06);
+  }
+
+  .tagline {
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-indent: 0.42em;
+    color: #fff;
+  }
+
+  /* ── Controls panel ──────────────────────────────────────────────── */
+  .controls-panel {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(580px, calc(100% - 2rem));
+    background: rgba(0, 0, 0, 0.82);
+    border: 1px solid #222;
+    border-radius: 4px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  /* Panel header */
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .mode-tabs {
+    display: flex;
+    gap: 0.1rem;
+  }
+
+  .tab-btn {
+    font-family: var(--font-display);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #444;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .tab-btn.active {
+    color: var(--text-primary);
+    border-color: #333;
+  }
+
+  .tab-btn:hover:not(.active) { color: #888; }
+
+  .invert-btn {
+    font-family: var(--font-display);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #444;
+    background: transparent;
+    border: 1px solid #222;
+    border-radius: 2px;
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .invert-btn.active {
+    color: var(--text-primary);
+    border-color: #555;
+  }
+
+  .invert-btn:hover { color: #888; border-color: #333; }
+
+  /* Panel body */
+  .panel-body {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 0;
+    min-height: 120px;
+  }
+
+  .col-divider {
+    background: #1a1a1a;
+    width: 1px;
+  }
+
+  /* Input column */
+  .col-input {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .hidden { display: none !important; }
+
+  .text-input {
+    width: 100%;
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 2px;
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    padding: 0.45rem 0.6rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .text-input:focus { border-color: #444; }
+
+  .font-select {
+    width: 100%;
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 2px;
+    color: #888;
+    font-family: var(--font-display);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.6rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+    appearance: none;
+  }
+
+  .font-select:focus { border-color: #444; }
+
+  /* Draw pad */
+  .draw-pad {
+    width: 100%;
+    aspect-ratio: 2.5 / 1;
+    background: #fff;
+    border-radius: 2px;
+    cursor: crosshair;
+    touch-action: none;
+    display: block;
+  }
+
+  .clear-btn {
+    align-self: flex-start;
+    font-family: var(--font-display);
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #444;
+    background: transparent;
+    border: 1px solid #222;
+    border-radius: 2px;
+    padding: 0.28rem 0.6rem;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .clear-btn:hover { color: #888; border-color: #333; }
+
+  /* SVG preview column */
+  .col-svg {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .col-label {
+    font-family: var(--font-display);
+    font-size: 0.55rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #333;
+  }
+
+  .svg-preview {
+    flex: 1;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .svg-preview :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .svg-preview :global(path) {
+    fill: #f0f0f0;
+  }
+
+  /* ── Scroll hint ─────────────────────────────────────────────────── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* ── Content section ─────────────────────────────────────────────── */
+  .content {
+    background: #000;
+    padding: 6rem 2rem 8rem;
+  }
+
+  article {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .block h2 {
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .block p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #b0b0b0;
+    letter-spacing: 0.02em;
+  }
+
+  .block p + p { margin-top: 1rem; }
+
+  .block code {
+    font-size: 0.82rem;
+    color: #888;
+    background: #0c0c0c;
+    border: 1px solid #1a1a1a;
+    border-radius: 2px;
+    padding: 0.1em 0.4em;
+  }
+
+  .traits {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .traits li {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #b0b0b0;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .traits li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: #333;
+  }
+
+  .gh-link {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid #222;
+    border-radius: 2px;
+    padding: 0.65rem 1.25rem;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .gh-link:hover {
+    color: var(--text-primary);
+    border-color: #444;
+  }
+
+  /* ── Mobile ──────────────────────────────────────────────────────── */
+  @media (max-width: 520px) {
+    .scene-overlay {
+      bottom: auto;
+      top: 2rem;
+      left: 1.5rem;
+    }
+
+    .controls-panel {
+      bottom: 2rem;
+    }
+
+    .panel-body {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1px auto;
+    }
+
+    .col-divider {
+      width: 100%;
+      height: 1px;
+    }
+
+    .col-svg {
+      min-height: 80px;
+    }
+
+    .content {
+      padding: 4rem 1.25rem 6rem;
+    }
+  }
+</style>
