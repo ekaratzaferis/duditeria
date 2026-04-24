@@ -72,9 +72,15 @@ export async function initFour20Engine(canvas, refs) {
   let bounceAnims = [];  // { mesh, baseZ, startTime, duration, dist }
   let bounceTimerId = null;
 
-  const wireframeMat = new THREE.MeshBasicMaterial({
-    color: 0x44ffaa,
-    wireframe: true,
+  const wireframeMat = new THREE.MeshPhysicalMaterial({
+    color: 0xffee00,
+    emissive: 0xffcc00,
+    emissiveIntensity: 0.6,
+    metalness: 0.6,
+    roughness: 0.08,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.08,
+    side: THREE.DoubleSide,
   });
 
   function clearBounce() {

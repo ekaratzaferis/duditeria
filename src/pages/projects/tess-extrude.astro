@@ -1,0 +1,249 @@
+---
+import Base from '../../layouts/Base.astro';
+import TessExtrudeCanvas from '../../components/TessExtrudeCanvas.astro';
+import '../../styles/global.css';
+---
+
+<Base
+  title="tess-extrude — Duditeria"
+  description="tess-extrude is a TypeScript library that extrudes 2D polygon outlines into Three.js BufferGeometry using Delaunay tessellation — accepts raw points or SVG, zero runtime deps beyond Three.js."
+  canonical="https://duditeria.com/projects/tess-extrude"
+>
+  <header class="top-bar fade-in">
+    <a href="/projects" class="back-link">← Projects</a>
+    <span class="header-title">tess-extrude <span class="header-sub">/ 2D polygon → 3D geometry</span></span>
+  </header>
+
+  <!-- Scene -->
+  <section class="scene">
+    <TessExtrudeCanvas />
+
+    <div class="scene-overlay fade-in">
+      <h1 class="title">tess-extrude</h1>
+      <p class="tagline">2D polygon → 3D geometry</p>
+    </div>
+
+    <p class="scroll-hint fade-in-delay-2">scroll ↓</p>
+  </section>
+
+  <!-- Description -->
+  <section class="content">
+    <article>
+
+      <div class="block fade-up">
+        <h2>How it works</h2>
+        <p>
+          You hand it a 2D polygon — a handful of points, or an SVG path — and it gives back
+          a solid 3D shape ready to drop into any Three.js scene.
+        </p>
+        <p>
+          Under the hood it runs a constrained Delaunay triangulation on the polygon's interior,
+          using a WebAssembly port of the Triangle library. That gives you a clean mesh of
+          non-overlapping triangles that respects the boundary exactly, with no gaps or slivers.
+          The cap is then mirrored and the two faces are connected by side walls to form the
+          final extruded volume.
+        </p>
+        <p>
+          The scene above is a live example — a flat rectangle tessellated by the library,
+          with each triangle painted independently.
+        </p>
+      </div>
+
+      <div class="block fade-up">
+        <h2>Where you'd use it</h2>
+        <ul class="traits">
+          <li>Turning SVG logos or icons into 3D objects for product configurators or hero scenes</li>
+          <li>Rendering extruded text in WebGL without relying on font-specific geometry builders</li>
+          <li>Procedural terrain patches or architectural floor plans that need actual depth</li>
+          <li>Any situation where you have a 2D outline and need a solid, well-triangulated mesh</li>
+        </ul>
+      </div>
+
+      <div class="block fade-up">
+        <a
+          href="https://github.com/ekaratzaferis/tess-extrude"
+          class="gh-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on GitHub →
+        </a>
+      </div>
+
+    </article>
+  </section>
+</Base>
+
+<style>
+  :global(html),
+  :global(body) {
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+
+  /* ── Top bar ─────────────────────────────────────────────────────── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 3rem;
+    padding: 0 2rem;
+    background: #000;
+    border-bottom: 1px solid #1a1a1a;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .back-link {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #888;
+    white-space: nowrap;
+    transition: color 0.25s ease;
+  }
+
+  .back-link:hover { color: #ccc; }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .header-sub { color: #444; }
+
+  /* ── Scene ───────────────────────────────────────────────────────── */
+  .scene {
+    position: relative;
+    width: 100%;
+    height: calc(100dvh - 3rem);
+    overflow: hidden;
+  }
+
+  .scene-overlay {
+    position: absolute;
+    bottom: 5rem;
+    left: 2.5rem;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 7vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    -webkit-text-stroke: 2px #000;
+    paint-order: stroke fill;
+  }
+
+  .tagline {
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-indent: 0.42em;
+    color: #fff;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── Content ─────────────────────────────────────────────────────── */
+  .content {
+    background: #000;
+    padding: 6rem 2rem 8rem;
+  }
+
+  article {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .block h2 {
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .block p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #b0b0b0;
+    letter-spacing: 0.02em;
+  }
+
+  .block p + p { margin-top: 1rem; }
+
+  /* Traits list */
+  .traits {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .traits li {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #b0b0b0;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .traits li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: #333;
+  }
+
+  /* GitHub link */
+  .gh-link {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid #222;
+    border-radius: 2px;
+    padding: 0.65rem 1.25rem;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .gh-link:hover {
+    color: var(--text-primary);
+    border-color: #444;
+  }
+
+  /* Responsive */
+  @media (max-width: 520px) {
+    .scene-overlay { bottom: 5.5rem; left: 1.5rem; }
+    .content       { padding: 4rem 1.25rem 6rem; }
+    .tagline       { font-size: 0.58rem; letter-spacing: 0.1em; }
+  }
+</style>
