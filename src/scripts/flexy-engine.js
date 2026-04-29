@@ -36,7 +36,9 @@ export function initFlexyEngine(canvas) {
 
     // --- 4. THE LAMP ---
     lampGroup = new THREE.Group();
-    lampGroup.position.set(-12, 0, 0);
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) lampGroup.position.set(3, 0, -10);
+    else lampGroup.position.set(-12, 0, 0);
     scene.add(lampGroup);
 
     // Base
@@ -94,8 +96,7 @@ export function initFlexyEngine(canvas) {
     spotLight.position.set(0, -0.4, 0); 
 
     // 2. Set the spread angle
-    // Math.PI / 3 is roughly 60 degrees. Math.PI is too wide for a spotlight!
-    spotLight.angle = Math.PI; 
+    spotLight.angle = Math.PI / 2; 
     spotLight.penumbra = 1;
     spotLight.decay = 1.7;
     spotLight.distance = 80;
