@@ -1,0 +1,273 @@
+---
+import Base from '../../layouts/Base.astro';
+import FlexyCanvas from '../../components/FlexyCanvas.astro';
+import '../../styles/global.css';
+---
+
+<Base
+  title="flexy — Duditeria"
+  description="flexy is a Three.js library that bends BufferGeometry along Bezier curves — warp any 3D shape to follow a path, stretch or tile it to fill the arc."
+  canonical="https://duditeria.com/projects/flexy"
+>
+  <header class="top-bar fade-in">
+    <a href="/projects" class="back-link">← Projects</a>
+    <span class="header-title">flexy <span class="header-sub">/ bend geometry along curves</span></span>
+  </header>
+
+  <!-- Scene -->
+  <section class="scene">
+    <FlexyCanvas />
+
+    <div class="scene-overlay fade-in">
+      <h1 class="title">flexy</h1>
+      <p class="tagline">bend geometry along curves</p>
+    </div>
+
+    <p class="scroll-hint fade-in-delay-2">scroll ↓</p>
+  </section>
+
+  <!-- Description -->
+  <section class="content">
+    <article>
+
+      <div class="block fade-up">
+        <h2>How it works</h2>
+        <p>
+          You hand it a <code>BufferGeometry</code> and a <code>CubicBezierCurve3</code>, and it
+          deforms the geometry so it flows along that curve — preserving the cross-sectional shape
+          and orientation at every point.
+        </p>
+        <p>
+          Under the hood it maps each vertex's position along the geometry's elongation axis to a
+          parameter <em>t</em> on the curve, samples the tangent there, rotates the vertex's
+          perpendicular component to match the curve's local frame, and writes the final world
+          position back into the buffer. The result is a smooth, continuous deformation with no
+          pinching or self-intersection.
+        </p>
+        <p>
+          Three modes control how the geometry's length relates to the curve's arc length:
+          <em>fit</em> stretches or compresses it to fill the curve exactly,
+          <em>preserve</em> keeps the original scale and centers it on the curve, and
+          <em>tile</em> repeats the geometry if it's shorter than the arc.
+        </p>
+      </div>
+
+      <div class="block fade-up">
+        <h2>The scene above</h2>
+        <p>
+          A sansevieria plant rendered entirely with <code>flexy.bend()</code>. Each leaf is a
+          tapered quad-strip geometry bent along a live Bezier curve — the curve's endpoint tracks
+          the orbiting sun in real time, so the leaves follow the light as it sweeps across the sky.
+        </p>
+        <p>
+          Every frame the original vertex positions are restored from a backup, a new curve is
+          computed from the leaf root toward the current sun direction, and <code>flexy.bend()</code>
+          rewrites the buffer in place. Eight leaves, eight curves, updating every third frame.
+        </p>
+      </div>
+
+      <div class="block fade-up">
+        <h2>Where you'd use it</h2>
+        <ul class="traits">
+          <li>Organic plant or vine growth animations where shapes follow a procedural path</li>
+          <li>Roads, rivers, or cables that need to conform to a spline without manual rigging</li>
+          <li>Procedural character animation — bending limbs or tails along Bezier arcs</li>
+          <li>Any geometry that needs to morph its shape in response to a changing curve</li>
+        </ul>
+      </div>
+
+      <div class="block fade-up">
+        <a
+          href="https://github.com/ekaratzaferis/flexy"
+          class="gh-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on GitHub →
+        </a>
+      </div>
+
+    </article>
+  </section>
+</Base>
+
+<style>
+  :global(html),
+  :global(body) {
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+
+  /* ── Top bar ─────────────────────────────────────────────────────── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 3rem;
+    padding: 0 2rem;
+    background: #000;
+    border-bottom: 1px solid #1a1a1a;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .back-link {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #888;
+    white-space: nowrap;
+    transition: color 0.25s ease;
+  }
+
+  .back-link:hover { color: #ccc; }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .header-sub { color: #444; }
+
+  /* ── Scene ───────────────────────────────────────────────────────── */
+  .scene {
+    position: relative;
+    width: 100%;
+    height: calc(100dvh - 3rem);
+    overflow: hidden;
+  }
+
+  .scene-overlay {
+    position: absolute;
+    bottom: 5rem;
+    left: 2.5rem;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 7vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    -webkit-text-stroke: 2px #000;
+    paint-order: stroke fill;
+  }
+
+  .tagline {
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-indent: 0.42em;
+    color: #fff;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── Content ─────────────────────────────────────────────────────── */
+  .content {
+    background: #000;
+    padding: 6rem 2rem 8rem;
+  }
+
+  article {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .block h2 {
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .block p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #b0b0b0;
+    letter-spacing: 0.02em;
+  }
+
+  .block p + p { margin-top: 1rem; }
+
+  .block code, .block em {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    color: #888;
+    font-style: normal;
+  }
+
+  /* Traits list */
+  .traits {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .traits li {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #b0b0b0;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .traits li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: #333;
+  }
+
+  /* GitHub link */
+  .gh-link {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid #222;
+    border-radius: 2px;
+    padding: 0.65rem 1.25rem;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .gh-link:hover {
+    color: var(--text-primary);
+    border-color: #444;
+  }
+
+  /* Responsive */
+  @media (max-width: 520px) {
+    .scene-overlay { bottom: 5.5rem; left: 1.5rem; }
+    .content       { padding: 4rem 1.25rem 6rem; }
+    .tagline       { font-size: 0.58rem; letter-spacing: 0.1em; }
+  }
+</style>
