@@ -1,16 +1,28 @@
 ---
 ---
 
-<canvas id="flexy-canvas"></canvas>
+<div class="flexy" data-flexy>
+  <canvas id="flexy-canvas" aria-label="Interactive desk lamp. Drag to draw a new shape for its arm."></canvas>
+
+  <div class="tools">
+    <button type="button" class="tool draw-toggle" data-draw aria-pressed="false">✎ Draw</button>
+    <button type="button" class="tool" data-reset>↺ Reset</button>
+  </div>
+</div>
 
 <script>
   import { initFlexyEngine } from '../scripts/flexy-engine.js';
 
-  const canvas = document.getElementById('flexy-canvas');
-  if (canvas) {
+  const root = document.querySelector<HTMLElement>('[data-flexy]');
+  const canvas = document.getElementById('flexy-canvas') as HTMLCanvasElement | null;
+  if (root && canvas) {
     try {
-      const dispose = initFlexyEngine(canvas);
-      window.addEventListener('beforeunload', dispose, { once: true });
+      const dispose = initFlexyEngine(canvas, {
+        root,
+        drawBtn: root.querySelector('[data-draw]'),
+        resetBtn: root.querySelector('[data-reset]'),
+      });
+      window.addEventListener('pagehide', dispose, { once: true });
     } catch (err) {
       console.error('[flexy-engine] init failed:', err);
     }
@@ -18,13 +30,66 @@
 </script>
 
 <style>
+  .flexy {
+    position: absolute;
+    inset: 0;
+  }
+
   canvas {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
     display: block;
     touch-action: pan-y;
+    cursor: crosshair;
+  }
+
+  .flexy.is-drawing canvas {
+    cursor: grabbing;
+  }
+
+  .tools {
+    position: absolute;
+    top: 1.25rem;
+    right: clamp(1rem, 4vw, 3rem);
+    z-index: 4;
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .tool {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: var(--m-text);
+    background: rgba(8, 8, 10, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--m-border-strong);
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .tool:hover {
+    border-color: var(--m-text-3);
+  }
+
+  .tool[aria-pressed='true'] {
+    color: #0b0b0b;
+    background: var(--m-accent);
+    border-color: var(--m-accent);
+  }
+
+  /* Draw toggle only matters on touch screens; mice draw directly */
+  .draw-toggle {
+    display: none;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .draw-toggle {
+      display: inline-block;
+    }
   }
 </style>

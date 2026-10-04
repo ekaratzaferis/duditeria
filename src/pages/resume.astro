@@ -1,215 +1,207 @@
 ---
 import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import '../styles/global.css';
+import { approach } from '../data/approach';
+
+const toolbox = [
+  {
+    group: 'Architecture & delivery',
+    items: ['System design', 'API contracts', 'Domain modelling', 'Code review', 'Tech-debt strategy', 'Agile'],
+  },
+  {
+    group: 'AI-native engineering',
+    items: ['AI coding agents', 'Spec & context design', 'Agent guardrails', 'LLM integration'],
+  },
+  {
+    group: 'Stack',
+    items: ['Node.js', 'TypeScript', 'React', 'Python', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'Cloud', 'REST'],
+  },
+];
 ---
 
 <Base
+  modern
   title="Resume — Alexandros Karatzaferis"
-  description="Software Architect with 10+ years making teams ship more and fight less. Principal-level experience across SaaS, remote orgs, and different company stages."
+  description="Software Architect with 10+ years of experience. I translate business requirements into system architecture, orchestrate AI agents to build it, review what they ship, and own the result."
   canonical="https://duditeria.com/resume"
 >
-  <header class="top-bar fade-in">
-    <a href="/" class="back-link">← Duditeria</a>
-    <span class="header-title">Resume</span>
-  </header>
+  <SiteHeader current="resume" />
 
   <main>
     <div class="bento">
 
-      <!-- ── 1. NAME ───────────────────────────────────────────────── -->
-      <div class="card card-name" data-reveal style="--d:0">
-        <p class="name-eyebrow">Making teams ship more and fight less</p>
-        <h1 class="name-text">Alexandros<br>Karatzaferis</h1>
-        <p class="name-sub">Software Architect · 10+ years · Athens</p>
-      </div>
+      <!-- ── Name ─────────────────────────────────────────────────── -->
+      <section class="card card-name" data-reveal style="--d:0">
+        <p class="eyebrow eyebrow-accent">Software Architect · AI-native delivery</p>
+        <h1 class="name-text">Alexandros<br />Karatzaferis</h1>
+        <p class="name-sub">10+ years · Athens · Remote</p>
+      </section>
 
-      <!-- ── 2. PHOTO ──────────────────────────────────────────────── -->
-      <!--
-        Drop your photo at public/photo.jpg — the card will fill automatically.
-        Until then it shows the AK monogram.
-      -->
+      <!-- ── Photo ────────────────────────────────────────────────── -->
       <div class="card card-photo" data-reveal style="--d:1">
         <img src="/alex.webp" alt="Alexandros Karatzaferis" class="photo-img" />
       </div>
 
-      <!-- ── 3. EXPERIENCE (spans rows 1+2) ────────────────────────── -->
-      <div class="card card-exp" data-reveal style="--d:2">
+      <!-- ── Approach ─────────────────────────────────────────────── -->
+      <section class="card card-approach" data-reveal style="--d:2">
+        <h2 class="headline">The intent is mine.<br /><span>Agents are how it gets built.</span></h2>
+        <ol class="steps">
+          {approach.map((s) => (
+            <li class="step">
+              <span class="step-n">{s.n}</span>
+              <h3 class="step-title">{s.title}</h3>
+              <p class="step-text">{s.text}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <!-- ── Experience ───────────────────────────────────────────── -->
+      <section class="card card-exp" data-reveal style="--d:3">
         <h2 class="card-label">Experience</h2>
 
         <div class="tl">
 
-          <div class="tl-item">
+          <article class="tl-item current">
             <div class="tl-head">
               <div>
-                <span class="tl-role">Software Architect</span>
-                <span class="tl-company">THEFUTUREOFJEWELRY · Remote</span>
+                <h3 class="tl-role">Software Architect</h3>
+                <p class="tl-company">THEFUTUREOFJEWELRY · Remote</p>
               </div>
               <span class="tl-dates">Feb 2020 – Present</span>
             </div>
             <ul class="tl-bullets">
-              <li>Designed and owned the core product architecture for five years — stable enough to absorb major product pivots without rewrites, and trusted enough that engineering decisions rarely needed defending.</li>
-              <li>Reframed technical debt from a morale problem into a shared roadmap — the team stopped treating it as someone else's problem and started treating it as part of the work.</li>
-              <li>Mentored a 7-person engineering team and represented the discipline at the C-suite — translating product uncertainty into technical direction, and technical trade-offs into business language.</li>
-              <li>Kept the architecture simple enough that new engineers were shipping within their first week — KISS wasn't a wall poster, it was how we actually built.</li>
-              <li>Brought AI coding agents into the workflow early — before it was fashionable — raising junior engineer productivity by ~25% and freeing the whole team to focus on harder problems.</li>
-              <li>Established two-week sprints to build delivery habits, then let the team outgrow them — deploys moved to business rhythm rather than calendar pressure, which suited both the product and the team.</li>
+              <li>Designed and own the core product architecture — stable enough to absorb major product pivots without rewrites, and trusted enough that engineering decisions rarely need defending.</li>
+              <li>Sit between the C-suite and the build: turn product uncertainty into technical direction, and technical trade-offs back into business language that leadership can decide on.</li>
+              <li>Brought AI coding agents into the workflow early, before it was fashionable, and raised junior engineer productivity by ~25%. Since then I've reshaped delivery so agents carry a growing share of implementation, while I own the specs, the architecture and the review gate.</li>
+              <li>Built the guardrails that make agent-written code safe to ship: clear module boundaries, written contracts, and a review process where nothing merges without architectural sign-off.</li>
+              <li>Kept the architecture simple enough that new engineers ship within their first week, and agents can work in it without getting lost. KISS isn't a wall poster. It's how we build.</li>
+              <li>Reframed technical debt from a morale problem into a shared roadmap, and mentored a 7-person engineering team through it.</li>
+              <li>Set up two-week sprints to build delivery habits, then let the team outgrow them. Deploys now follow business rhythm, not calendar pressure.</li>
             </ul>
-          </div>
+          </article>
 
-          <div class="tl-item">
+          <article class="tl-item">
             <div class="tl-head">
               <div>
-                <span class="tl-role">Software Engineer</span>
-                <span class="tl-company">Viral Loops · Athens</span>
+                <h3 class="tl-role">Software Engineer</h3>
+                <p class="tl-company">Viral Loops · Athens</p>
               </div>
               <span class="tl-dates">Jan 2018 – Jan 2020</span>
             </div>
             <ul class="tl-bullets">
-              <li>Owned feature development end-to-end on a viral marketing platform — picked up an unfamiliar codebase fast and shipped reliably without handholding.</li>
+              <li>Owned feature development end-to-end on a viral marketing platform. Picked up an unfamiliar codebase fast and shipped reliably without handholding.</li>
               <li>Worked at real production scale: thousands of concurrent users, sharp spikes during campaign launches, and background jobs that couldn't slip under pressure.</li>
             </ul>
-          </div>
+          </article>
 
-          <div class="tl-item">
+          <article class="tl-item">
             <div class="tl-head">
               <div>
-                <span class="tl-role">Node.js Software Engineer</span>
-                <span class="tl-company">wappier · Athens</span>
+                <h3 class="tl-role">Node.js Software Engineer</h3>
+                <p class="tl-company">wappier · Athens</p>
               </div>
               <span class="tl-dates">Jan – Dec 2017</span>
             </div>
             <ul class="tl-bullets">
-              <li>Full-stack engineer on a MongoDB–Node–Angular revenue management platform — learned the stack, found my footing quickly, and contributed without drama.</li>
+              <li>Full-stack engineer on a MongoDB–Node–Angular revenue management platform. Learned the stack, found my footing quickly, and contributed without drama.</li>
             </ul>
-          </div>
+          </article>
 
-          <div class="tl-item">
+          <article class="tl-item">
             <div class="tl-head">
               <div>
-                <span class="tl-role">Front-End Developer</span>
-                <span class="tl-company">University of São Paulo – IPEN · Athens</span>
+                <h3 class="tl-role">Front-End Developer</h3>
+                <p class="tl-company">University of São Paulo – IPEN · Athens</p>
               </div>
               <span class="tl-dates">Sep 2015 – Dec 2016</span>
             </div>
             <ul class="tl-bullets">
-              <li>Built a scientific crystal-structure visualization tool for researchers — a domain I knew nothing about before I started, which turned out to be the point.</li>
+              <li>Built a scientific crystal-structure visualisation tool for researchers. I knew nothing about the domain before I started, which turned out to be the point.</li>
             </ul>
-          </div>
+          </article>
 
         </div>
-      </div>
+      </section>
 
-      <!-- ── 4. ABOUT ME ──────────────────────────────────────────── -->
-      <div class="card card-about" data-reveal style="--d:3">
+      <!-- ── About ────────────────────────────────────────────────── -->
+      <section class="card card-about" data-reveal style="--d:4">
         <h2 class="card-label">About</h2>
         <p class="about-text">
-          Most engineers move toward either the code or the people. I've always done both, because I've seen what breaks when you separate them. Over 10 years across different team sizes and company stages, I've learned that the best systems aren't just well-architected — they're built by teams who trust each other and know what they're building toward.
+          Writing code is no longer the bottleneck. Knowing <em>what</em> to build, how it should fit together, and whether what got built is actually right: that's the hard part now. It's also the job I've been doing since 2020.
         </p>
         <p class="about-text">
-          I've spent the last five years as the architect who still reads the code, mentors the engineers, and sits in the room when the business makes decisions that affect the team. The thread isn't a stack or a domain — it's getting teams to a place where shipping feels natural and the work actually matters.
+          I work as the architect between the business and the build. I turn fuzzy requirements into system designs with clear boundaries and contracts, hand well-scoped work to AI agents, make sure what comes back is what was asked for, and answer for the result. Agents made us faster. They didn't make anyone less accountable.
         </p>
-      </div>
+        <p class="about-text">
+          I still care about the people side too: mentoring, trust, teams that ship without drama. The best systems are built by people who know what they're building toward.
+        </p>
+      </section>
 
-      <!-- ── 5. CONTACT LINK ──────────────────────────────────────── -->
-      <a href="/contact" class="card card-contact" data-reveal style="--d:4">
-        <span class="contact-label">Wanna get in touch?</span>
-        <div class="contact-cta">
-          <span class="contact-cta-text">Contact Me</span>
-          <span class="contact-arrow">↗</span>
-        </div>
+      <!-- ── Contact ──────────────────────────────────────────────── -->
+      <a href="/contact" class="card card-contact" data-reveal style="--d:5">
+        <span class="eyebrow">Have a system that needs an owner?</span>
+        <span class="contact-cta">
+          <span class="contact-cta-text">Let's talk</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </span>
       </a>
 
-      <!-- ── 6. FEATURED WORK ─────────────────────────────────────── -->
-      <a href="https://github.com/ekaratzaferis" target="_blank" rel="noopener" class="card card-work" data-reveal style="--d:7">
-        <h2 class="work-label">Featured Work</h2>
-        <div class="work-visual">
-          <div class="work-screen">
-            <div class="work-screen-bar">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="work-screen-body">
-              <div class="work-line w-80"></div>
-              <div class="work-line w-60"></div>
-              <div class="work-line w-90"></div>
-              <div class="work-line w-40"></div>
-              <div class="work-line w-70"></div>
-            </div>
-          </div>
-        </div>
-        <div class="work-footer">
-          <span>github.com/ekaratzaferis</span>
-          <span class="work-arrow">↗</span>
-        </div>
-      </a>
+      <!-- ── Education + Languages ────────────────────────────────── -->
+      <section class="card card-edu" data-reveal style="--d:6">
+        <h2 class="card-label">Education</h2>
+        <p class="edu-degree">Electronic &amp; Computer Engineering</p>
+        <p class="edu-school">Technical University of Crete</p>
+        <p class="edu-detail">B.Eng. · 2007 – 2015</p>
 
-      <!-- ── 7. GOING DEEP ─────────────────────────────────────────── -->
-      <div class="card card-explore" data-reveal style="--d:6">
-        <h2 class="card-label">Going Deep</h2>
+        <h2 class="card-label lang-label">Languages</h2>
+        <div class="lang-row"><span>English</span><span class="lang-level">Bilingual</span></div>
+        <div class="lang-row"><span>Greek</span><span class="lang-level">Native</span></div>
+      </section>
+
+      <!-- ── Going deep ───────────────────────────────────────────── -->
+      <section class="card card-explore" data-reveal style="--d:7">
+        <h2 class="card-label">Going deep</h2>
         <p class="explore-why">
-          Before I use something, I try to understand what it actually is. I went deep on things like the JS event loop and Python's GIL. Now I'm doing the same with AI — learning the math and mechanics from the ground up, because I want to work <em>on</em> this technology, not just with it.
+          Before I rely on something, I try to understand what it actually is. I did it with the JS event loop and Python's GIL. Now I'm doing it with AI, learning the math and mechanics from the ground up, because you can't direct a tool well if you don't know how it fails.
         </p>
-        <div class="explore-topics">
-          <span class="explore-tag">Linear Algebra</span>
-          <span class="explore-tag">Neural Networks</span>
-          <span class="explore-tag">Backpropagation</span>
-          <span class="explore-tag">Transformers</span>
-          <span class="explore-tag">Attention</span>
-          <span class="explore-tag">CNNs</span>
+        <div class="tags">
+          <span class="tag">Linear algebra</span>
+          <span class="tag">Neural networks</span>
+          <span class="tag">Backpropagation</span>
+          <span class="tag">Transformers</span>
+          <span class="tag">Attention</span>
+          <span class="tag">CNNs</span>
         </div>
-      </div>
+      </section>
 
-      <!-- ── 8. SKILLS / TOOLBOX ─────────────────────────────────── -->
-      <div class="card card-skills" data-reveal style="--d:8">
+      <!-- ── Toolbox ──────────────────────────────────────────────── -->
+      <section class="card card-skills" data-reveal style="--d:8">
         <h2 class="card-label">Toolbox</h2>
-        <div class="toolbox">
-          <div class="tool-box">Node.js</div>
-          <div class="tool-box">JS</div>
-          <div class="tool-box">React</div>
-          <div class="tool-box">MongoDB</div>
-          <div class="tool-box">REST</div>
-          <div class="tool-box">Cloud</div>
-          <div class="tool-box">Docker</div>
-          <div class="tool-box">Git</div>
-          <div class="tool-box">AI&nbsp;/&nbsp;LLM</div>
-          <div class="tool-box">SaaS</div>
-          <div class="tool-box">Arch.</div>
-          <div class="tool-box">Agile</div>
-          <div class="tool-box">Python</div>
-          <div class="tool-box">Redis</div>
-          <div class="tool-box">Kubernetes</div>
-        </div>
-      </div>
-
-      <!-- ── 8. EDUCATION + EXTRAS ──────────────────────────────── -->
-      <div class="card card-edu" data-reveal style="--d:5">
-
-        <section class="edu-block">
-          <h2 class="card-label">Education</h2>
-          <p class="edu-degree">Electronic &amp; Computer Engineering</p>
-          <p class="edu-school">Technical University of Crete</p>
-          <p class="edu-detail">B.Eng. · 2007 – 2015</p>
-        </section>
-
-        <section class="edu-block">
-          <h2 class="card-label" style="margin-top:1.5rem">Languages</h2>
-          <div class="lang-row">
-            <span class="lang-name">English</span>
-            <span class="lang-level">Bilingual</span>
+        {toolbox.map((g) => (
+          <div class="tool-group">
+            <h3 class="tool-group-title">{g.group}</h3>
+            <div class="tags">
+              {g.items.map((i) => <span class="tag">{i}</span>)}
+            </div>
           </div>
-          <div class="lang-row">
-            <span class="lang-name">Greek</span>
-            <span class="lang-level">Native</span>
-          </div>
-        </section>
+        ))}
+      </section>
 
-      </div>
+      <!-- ── Work ─────────────────────────────────────────────────── -->
+      <a href="https://github.com/ekaratzaferis" target="_blank" rel="noopener" class="card card-work" data-reveal style="--d:9">
+        <span class="eyebrow">Open source</span>
+        <span class="work-title">github.com/ekaratzaferis</span>
+        <span class="arrow" aria-hidden="true">↗</span>
+      </a>
 
     </div>
   </main>
 </Base>
 
 <script>
-  const cards = document.querySelectorAll('[data-reveal]');
+  const els = document.querySelectorAll('[data-reveal]');
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -221,163 +213,125 @@ import '../styles/global.css';
     },
     { threshold: 0.06, rootMargin: '0px 0px -20px 0px' }
   );
-  cards.forEach((c) => io.observe(c));
+  els.forEach((el) => io.observe(el));
 </script>
 
 <style>
-  /* ── Scroll ──────────────────────────────────────────────────────── */
-  :global(html), :global(body) { overflow: auto; height: auto; }
-
-  /* ── Top bar ─────────────────────────────────────────────────────── */
-  .top-bar {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    height: 3rem;
-    padding: 0 2rem;
-    background: #000;
-    border-bottom: 1px solid #1a1a1a;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  .back-link {
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #888;
-    white-space: nowrap;
-    transition: color 0.25s ease;
-  }
-
-  .back-link:hover {
-    color: #ccc;
-  }
-
-  .header-title {
-    font-family: var(--font-display);
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-primary);
-  }
-
-  /* ── Page ────────────────────────────────────────────────────────── */
   main {
-    padding: 1.5rem 1.25rem 4rem;
     max-width: 1160px;
     margin: 0 auto;
+    padding: 1.5rem 1.25rem 5rem;
   }
 
   /* ── Grid ────────────────────────────────────────────────────────── */
   .bento {
     display: grid;
-    grid-template-columns: 1fr 1fr 1.6fr;
+    grid-template-columns: 1fr 1fr 1.55fr;
     grid-template-areas:
-      "name      photo    exp"
-      "about     contact  exp"
-      "about     edu      exp"
-      "exploring featured exp"
-      "toolbox   featured exp";
-    gap: 10px;
+      "name     photo    exp"
+      "approach approach exp"
+      "about    about    exp"
+      "edu      contact  exp"
+      "skills   skills   explore"
+      "skills   skills   work";
+    gap: 12px;
   }
 
-  .card-name    { grid-area: name; }
-  .card-photo   { grid-area: photo; }
-  .card-exp     { grid-area: exp; }
-  .card-about   { grid-area: about; }
-  .card-contact { grid-area: contact; }
-  .card-work    { grid-area: featured; }
-  .card-skills  { grid-area: toolbox; }
-  .card-edu     { grid-area: edu; }
-  .card-explore { grid-area: exploring; }
+  .card-name     { grid-area: name; }
+  .card-photo    { grid-area: photo; }
+  .card-approach { grid-area: approach; }
+  .card-exp      { grid-area: exp; }
+  .card-about    { grid-area: about; }
+  .card-contact  { grid-area: contact; }
+  .card-edu      { grid-area: edu; }
+  .card-explore  { grid-area: explore; }
+  .card-skills   { grid-area: skills; }
+  .card-work     { grid-area: work; }
 
   /* ── Card base ───────────────────────────────────────────────────── */
   .card {
-    background: #0c0c0c;
-    border: 1px solid #1a1a1a;
-    border-radius: 12px;
-    padding: 1.75rem 2rem;
+    position: relative;
     display: block;
-    text-decoration: none;
-    color: inherit;
-
-    opacity: 0;
-    transform: translateY(18px);
+    background: linear-gradient(180deg, var(--m-surface) 0%, rgba(15, 15, 18, 0.7) 100%);
+    border: 1px solid var(--m-border);
+    border-radius: var(--m-radius);
+    padding: 1.75rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
     transition:
-      opacity      0.55s ease calc(var(--d, 0) * 60ms),
-      transform    0.55s ease calc(var(--d, 0) * 60ms),
-      border-color 0.22s ease,
-      box-shadow   0.22s ease;
+      opacity 0.6s ease calc(var(--d, 0) * 70ms),
+      transform 0.6s ease calc(var(--d, 0) * 70ms),
+      border-color 0.25s ease;
   }
 
-  .card.visible { opacity: 1; transform: translateY(0); }
-
-  .card.visible:hover {
-    border-color: #2a2a2a;
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
-    transform: translateY(-4px);
+  a.card:hover {
+    border-color: var(--m-border-strong);
   }
 
-  /* ── Section label ───────────────────────────────────────────────── */
   .card-label {
+    font-family: var(--font-mono);
     font-size: 0.72rem;
     font-weight: 400;
-    letter-spacing: 0.28em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #888;
-    margin-bottom: 1.4rem;
-    padding-bottom: 0.55rem;
-    border-bottom: 1px solid #1a1a1a;
+    color: var(--m-text-3);
+    margin-bottom: 1.25rem;
   }
 
-  /* ── 1. Name card ────────────────────────────────────────────────── */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    color: var(--m-text-2);
+    padding: 0.3rem 0.65rem;
+    border: 1px solid var(--m-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.015);
+  }
+
+  .arrow {
+    font-size: 1.25rem;
+    color: var(--m-text-3);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  a.card:hover .arrow {
+    color: var(--m-accent);
+    transform: translateX(3px);
+  }
+
+  /* ── Name ────────────────────────────────────────────────────────── */
   .card-name {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    min-height: 160px;
-    background: #080808;
-    padding: 2rem 2.25rem;
-  }
-
-  .name-eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #888;
-    margin-bottom: auto;
+    justify-content: space-between;
+    gap: 2rem;
+    min-height: 340px;
   }
 
   .name-text {
-    font-size: clamp(2.6rem, 5vw, 3.4rem);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: #f0f0f0;
-    line-height: 1.05;
-    margin-top: 1rem;
-    margin-bottom: 0.75rem;
+    font-size: clamp(2.2rem, 3.6vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    color: var(--m-text);
+    margin-top: auto;
   }
 
   .name-sub {
-    font-size: 0.75rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #666;
+    font-size: 0.9rem;
+    color: var(--m-text-3);
+    margin-top: -1.25rem;
   }
 
-  /* ── 2. Photo card ───────────────────────────────────────────────── */
+  /* ── Photo ───────────────────────────────────────────────────────── */
   .card-photo {
-    position: relative;
-    overflow: hidden;
     padding: 0;
-    min-height: 390px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #0a0a0a;
+    overflow: hidden;
+    min-height: 340px;
   }
 
   .photo-img {
@@ -387,27 +341,92 @@ import '../styles/global.css';
     height: 100%;
     object-fit: cover;
     object-position: 40% 10%;
-    border-radius: 11px;
+    filter: grayscale(0.35) contrast(1.05);
   }
 
-  .photo-fallback {
-    font-size: 3.5rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: #333;
-    user-select: none;
-    /* hidden when photo loads */
+  /* ── Approach ────────────────────────────────────────────────────── */
+  .headline {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    color: var(--m-text);
+    margin-bottom: 1.75rem;
   }
 
-  /* ── 3. Experience card ──────────────────────────────────────────── */
+  .headline span {
+    color: var(--m-accent);
+  }
+
+  .steps {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--m-border);
+    border: 1px solid var(--m-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .step {
+    background: var(--m-surface);
+    padding: 1.1rem 1.2rem 1.25rem;
+  }
+
+  .step-n {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--m-accent);
+  }
+
+  .step-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--m-text);
+    margin: 0.35rem 0 0.35rem;
+  }
+
+  .step-text {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--m-text-2);
+  }
+
+  /* ── Experience ──────────────────────────────────────────────────── */
   .card-exp {
-    padding: 2rem 2.25rem;
+    padding: 2rem;
   }
 
   .tl {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 2.2rem;
+    gap: 2.25rem;
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--m-border);
+  }
+
+  .tl-item {
+    position: relative;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: calc(-1.25rem - 4.5px);
+    top: 0.45rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--m-bg);
+    border: 1px solid var(--m-border-strong);
+  }
+
+  .tl-item.current::before {
+    background: var(--m-accent);
+    border-color: var(--m-accent);
+    box-shadow: 0 0 10px rgba(255, 178, 36, 0.6);
   }
 
   .tl-head {
@@ -415,352 +434,218 @@ import '../styles/global.css';
     justify-content: space-between;
     align-items: flex-start;
     gap: 1rem;
-    margin-bottom: 0.65rem;
+    margin-bottom: 0.8rem;
   }
 
   .tl-role {
-    display: block;
-    font-size: 1.1rem;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    color: #e0e0e0;
-    margin-bottom: 0.2rem;
+    font-size: 1.08rem;
+    font-weight: 500;
+    color: var(--m-text);
+    letter-spacing: -0.01em;
   }
 
   .tl-company {
-    display: block;
-    font-size: 0.75rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #888;
+    font-size: 0.82rem;
+    color: var(--m-text-3);
+    margin-top: 0.15rem;
   }
 
   .tl-dates {
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    color: #666;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--m-text-3);
     white-space: nowrap;
-    flex-shrink: 0;
-    padding-top: 0.15rem;
+    padding-top: 0.25rem;
   }
 
   .tl-bullets {
     list-style: none;
-    padding: 0;
-    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.55rem;
   }
 
   .tl-bullets li {
-    font-size: 0.92rem;
-    line-height: 1.7;
-    color: #c0c0c0;
-    letter-spacing: 0.01em;
-    padding-left: 1.1rem;
     position: relative;
+    padding-left: 1rem;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--m-text-2);
   }
 
   .tl-bullets li::before {
-    content: '–';
+    content: '';
     position: absolute;
     left: 0;
-    color: #555;
+    top: 0.72em;
+    width: 5px;
+    height: 1px;
+    background: var(--m-text-3);
   }
 
-  /* ── 4. About card ───────────────────────────────────────────────── */
+  /* ── About ───────────────────────────────────────────────────────── */
   .card-about {
     display: flex;
     flex-direction: column;
     gap: 0.9rem;
   }
 
-  .about-text {
-    font-size: 0.97rem;
-    line-height: 1.8;
-    color: #c0c0c0;
-    letter-spacing: 0.01em;
+  .card-about .card-label {
+    margin-bottom: 0.35rem;
   }
 
-  /* ── 5. Contact link card ────────────────────────────────────────── */
+  .about-text {
+    font-size: 0.98rem;
+    line-height: 1.75;
+    color: var(--m-text-2);
+  }
+
+  .about-text em {
+    color: var(--m-text);
+    font-style: normal;
+  }
+
+  /* ── Contact ─────────────────────────────────────────────────────── */
   .card-contact {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    cursor: pointer;
-    min-height: 160px;
-  }
-
-  .contact-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #888;
+    gap: 2rem;
+    min-height: 180px;
+    background:
+      radial-gradient(120% 120% at 100% 100%, var(--m-accent-soft), transparent 60%),
+      var(--m-surface);
   }
 
   .contact-cta {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.5rem;
   }
 
   .contact-cta-text {
-    font-size: clamp(1.8rem, 3vw, 2.8rem);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: #e0e0e0;
-    transition: color 0.2s;
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--m-text);
   }
 
-  .card-contact:hover .contact-cta-text { color: #ffffff; }
-
-  .contact-arrow {
-    font-size: 1.6rem;
-    color: #555;
-    transition: color 0.2s, transform 0.2s;
-  }
-
-  .card-contact:hover .contact-arrow {
-    color: #ccc;
-    transform: translate(3px, -3px);
-  }
-
-  /* ── 6. Featured work card ───────────────────────────────────────── */
-  .card-work {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 1.25rem;
-    cursor: pointer;
-    min-height: 200px;
-  }
-
-  .work-label {
-    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #e8e8e8;
-    transition: color 0.2s;
-  }
-
-  .card-work:hover .work-label { color: #ffffff; }
-
-  /* Fake laptop mockup */
-  .work-visual {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .work-screen {
-    width: 100%;
-    max-width: 200px;
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .work-screen-bar {
-    display: flex;
-    gap: 4px;
-    padding: 6px 8px;
-    background: #181818;
-    border-bottom: 1px solid #222;
-  }
-
-  .work-screen-bar span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #2a2a2a;
-  }
-
-  .work-screen-body {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .work-line {
-    height: 5px;
-    background: #222;
-    border-radius: 2px;
-  }
-  .w-80 { width: 80%; }
-  .w-60 { width: 60%; }
-  .w-90 { width: 90%; }
-  .w-40 { width: 40%; }
-  .w-70 { width: 70%; }
-
-  .work-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    color: #888;
-  }
-
-  .work-arrow {
-    font-size: 1.1rem;
-    transition: transform 0.2s, color 0.2s;
-  }
-
-  .card-work:hover .work-arrow {
-    transform: translate(3px, -3px);
-    color: #ccc;
-  }
-
-  /* ── 7. Skills / Toolbox card ────────────────────────────────────── */
-  .toolbox {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 5px;
-  }
-
-  .tool-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1;
-    border: 1px solid #222;
-    border-radius: 8px;
-    font-size: 0.78rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #aaa;
-    background: #0a0a0a;
-    text-align: center;
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
-  }
-
-  .tool-box:hover {
-    border-color: #3a3a3a;
-    color: #f0f0f0;
-    background: #111;
-  }
-
-  /* ── 8. Education card ───────────────────────────────────────────── */
-  .card-edu {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .edu-block { flex-shrink: 0; }
-
+  /* ── Education ───────────────────────────────────────────────────── */
   .edu-degree {
     font-size: 1rem;
-    color: #e0e0e0;
-    letter-spacing: 0.02em;
-    margin-bottom: 0.3rem;
+    color: var(--m-text);
+    margin-bottom: 0.25rem;
   }
 
   .edu-school {
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #888;
-    margin-bottom: 0.2rem;
+    font-size: 0.88rem;
+    color: var(--m-text-2);
   }
 
   .edu-detail {
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    color: #555;
-    font-style: italic;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--m-text-3);
+    margin-top: 0.3rem;
+  }
+
+  .lang-label {
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .lang-row {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    padding: 0.42rem 0;
-    border-bottom: 1px solid #141414;
+    padding: 0.45rem 0;
+    font-size: 0.92rem;
+    color: var(--m-text);
+    border-bottom: 1px solid var(--m-border);
   }
+
   .lang-row:last-child { border-bottom: none; }
 
-  .lang-name {
-    font-size: 0.95rem;
-    color: #d0d0d0;
-    letter-spacing: 0.03em;
-  }
-
   .lang-level {
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #666;
+    font-size: 0.82rem;
+    color: var(--m-text-3);
   }
 
-  /* ── Explore card ────────────────────────────────────────── */
+  /* ── Explore ─────────────────────────────────────────────────────── */
   .explore-why {
     font-size: 0.92rem;
-    line-height: 1.75;
-    color: #c0c0c0;
-    letter-spacing: 0.01em;
-    margin-bottom: 1.2rem;
+    line-height: 1.7;
+    color: var(--m-text-2);
+    margin-bottom: 1.25rem;
   }
 
-  .explore-topics {
+  /* ── Toolbox ─────────────────────────────────────────────────────── */
+  .tool-group + .tool-group {
+    margin-top: 1.25rem;
+  }
+
+  .tool-group-title {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--m-text);
+    margin-bottom: 0.6rem;
+  }
+
+  /* ── Work ────────────────────────────────────────────────────────── */
+  .card-work {
     display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
   }
 
-  .explore-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.3rem 0.7rem;
-    border: 1px solid #222;
-    border-radius: 6px;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #aaa;
-    background: #0a0a0a;
+  .work-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--m-text);
   }
 
-  /* ── Responsive — tablet ──────────────────────────────────────────── */
-  @media (max-width: 860px) {
+  /* ── Tablet ──────────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
     .bento {
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
-        "name      photo"
-        "about     contact"
-        "about     edu"
-        "exp       exp"
-        "exploring toolbox"
-        "featured  featured";
+        "name     photo"
+        "approach approach"
+        "about    about"
+        "exp      exp"
+        "explore  skills"
+        "edu      contact"
+        "work     work";
     }
+
   }
 
-  /* ── Responsive — mobile ─────────────────────────────────────────── */
-  @media (max-width: 520px) {
+  /* ── Mobile ──────────────────────────────────────────────────────── */
+  @media (max-width: 600px) {
+    main { padding: 1rem 1rem 4rem; }
+
     .bento {
       grid-template-columns: 1fr;
       grid-template-areas:
         "name"
         "photo"
+        "approach"
         "about"
         "contact"
         "exp"
-        "exploring"
-        "toolbox"
-        "featured"
-        "edu";
+        "skills"
+        "explore"
+        "edu"
+        "work";
     }
 
-    main { padding: 5rem 1rem 3rem; }
-    .card { padding: 1.5rem 1.5rem; }
-    .card-name { min-height: 200px; }
-    .card-photo { min-height: 280px; }
-    .card-contact { min-height: 140px; }
+    .card { padding: 1.4rem; }
+    .card-exp { padding: 1.4rem; }
+    .card-name { min-height: 240px; }
+    .card-photo { min-height: 320px; }
+    .steps { grid-template-columns: 1fr; }
+    .tl-head { flex-direction: column; gap: 0.35rem; }
+    .tl-dates { padding-top: 0; }
   }
 </style>

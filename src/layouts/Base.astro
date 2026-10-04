@@ -4,6 +4,7 @@ const {
   description = 'Duditeria — Software architecture and engineering by Alexandros Karatzaferis.',
   ogImage = '/og-image.png',
   canonical = 'https://duditeria.com/',
+  modern = false,
 } = Astro.props;
 ---
 
@@ -12,7 +13,7 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content={modern ? '#08080a' : '#000000'} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -40,7 +41,7 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Roboto+Condensed:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
 
@@ -54,15 +55,16 @@ const {
         "founder": {
           "@type": "Person",
           "name": "Alexandros Karatzaferis",
+          "jobTitle": "Software Architect",
           "email": "ekaratzaferis@gmail.com",
-          "sameAs": ["https://linkedin.com/in/ekaratzaferis"]
+          "sameAs": ["https://linkedin.com/in/ekaratzaferis", "https://github.com/ekaratzaferis"]
         }
       }
     </script>
 
     <slot name="head" />
   </head>
-  <body>
+  <body class:list={[{ modern }]}>
     <slot />
   </body>
 </html>

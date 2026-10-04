@@ -1,57 +1,92 @@
 ---
 import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import '../styles/global.css';
+
+const EMAIL = 'ekaratzaferis@gmail.com';
+
+const fits = [
+  'Architecture for a new product, or one that has to survive a pivot',
+  'Bringing AI agents into your delivery, with a review process that holds',
+  'Reviewing a system that agents (or a rushed team) already built',
+  'Remote architect roles',
+];
+
+const topics = ['Consulting', 'A role', 'Something else'];
 ---
 
 <Base
+  modern
   title="Contact — Alexandros Karatzaferis"
-  description="Get in touch with Alexandros Karatzaferis — Software Architect and Principal Engineer."
+  description="Get in touch with Alexandros Karatzaferis, a software architect who turns business requirements into systems AI agents can build, and owns the result."
   canonical="https://duditeria.com/contact"
 >
-  <header class="top-bar fade-in">
-    <a href="/" class="back-link">← Duditeria</a>
-    <span class="header-title">Contact</span>
-  </header>
+  <SiteHeader current="contact" />
 
   <main>
-    <div class="contact-wrap">
+    <div class="layout">
 
-      <header class="contact-header">
-        <h1 class="contact-title">Get in Touch</h1>
-        <p class="contact-sub">Available for remote roles, architecture consulting, and interesting problems.</p>
-      </header>
+      <section class="intro" data-reveal style="--d:0">
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Open to consulting &amp; remote roles</p>
+        <h1 class="title">Tell me what the business needs.</h1>
+        <p class="sub">I'll tell you how it should be built, and who (or what) should build it.</p>
 
-      <div class="contact-links">
-        <a href="mailto:ekaratzaferis@gmail.com" class="link-card">
-          <span class="link-label">Email</span>
-          <span class="link-value">ekaratzaferis@gmail.com</span>
-        </a>
-        <a href="https://linkedin.com/in/ekaratzaferis" target="_blank" rel="noopener" class="link-card">
-          <span class="link-label">LinkedIn</span>
-          <span class="link-value">linkedin.com/in/ekaratzaferis</span>
-        </a>
-        <a href="https://github.com/ekaratzaferis" target="_blank" rel="noopener" class="link-card">
-          <span class="link-label">GitHub</span>
-          <span class="link-value">github.com/ekaratzaferis</span>
-        </a>
-      </div>
+        <ul class="fits">
+          {fits.map((f) => <li>{f}</li>)}
+        </ul>
 
-      <form class="contact-form" id="contact-form" novalidate>
+        <div class="links">
+          <div class="link-row">
+            <a href={`mailto:${EMAIL}`} class="link">
+              <span class="link-label">Email</span>
+              <span class="link-value">{EMAIL}</span>
+            </a>
+            <button type="button" class="copy" data-copy={EMAIL} aria-label="Copy email address">Copy</button>
+          </div>
+          <a href="https://linkedin.com/in/ekaratzaferis" target="_blank" rel="noopener" class="link">
+            <span class="link-label">LinkedIn</span>
+            <span class="link-value">in/ekaratzaferis <span aria-hidden="true">↗</span></span>
+          </a>
+          <a href="https://github.com/ekaratzaferis" target="_blank" rel="noopener" class="link">
+            <span class="link-label">GitHub</span>
+            <span class="link-value">ekaratzaferis <span aria-hidden="true">↗</span></span>
+          </a>
+        </div>
+      </section>
+
+      <form class="form-card" id="contact-form" novalidate data-reveal style="--d:1">
+        <fieldset class="topics">
+          <legend>What's this about?</legend>
+          <div class="chips">
+            {topics.map((t, i) => (
+              <label class="chip">
+                <input type="radio" name="topic" value={t} checked={i === 0} />
+                <span>{t}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
         <div class="form-row">
-          <div class="form-field">
+          <div class="field">
             <label for="cf-name">Name</label>
             <input id="cf-name" name="name" type="text" autocomplete="name" placeholder="Your name" required />
           </div>
-          <div class="form-field">
+          <div class="field">
             <label for="cf-email">Email</label>
-            <input id="cf-email" name="email" type="email" autocomplete="email" placeholder="your@email.com" required />
+            <input id="cf-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required />
           </div>
         </div>
-        <div class="form-field">
-          <label for="cf-message">Message</label>
-          <textarea id="cf-message" name="message" rows="5" placeholder="What's on your mind?" required></textarea>
+
+        <div class="field">
+          <label for="cf-message">The brief</label>
+          <textarea id="cf-message" name="message" rows="7" placeholder="What does the business want? Plain words are fine. That's my job." required></textarea>
         </div>
-        <button type="submit" class="submit-btn">Send Message</button>
+
+        <div class="form-foot">
+          <button type="submit" class="submit">Send it <span aria-hidden="true">→</span></button>
+          <p class="hint" id="form-hint">Opens your email app. Nothing is stored here.</p>
+        </div>
       </form>
 
     </div>
@@ -59,151 +94,260 @@ import '../styles/global.css';
 </Base>
 
 <script>
-  const form = document.getElementById('contact-form');
+  const EMAIL = 'ekaratzaferis@gmail.com';
+
+  // Reveal
+  requestAnimationFrame(() => {
+    document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('visible'));
+  });
+
+  // Prefill from the homepage: /contact?brief=...
+  const brief = new URLSearchParams(location.search).get('brief');
+  const messageEl = document.getElementById('cf-message') as HTMLTextAreaElement | null;
+  if (brief && messageEl) {
+    messageEl.value = brief.slice(0, 2000);
+  }
+
+  // Copy email
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+        btn.textContent = 'Copied';
+      } catch {
+        btn.textContent = 'Press ⌘C';
+      }
+      setTimeout(() => (btn.textContent = 'Copy'), 1800);
+    });
+  });
+
+  // Submit → mailto
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const hint = document.getElementById('form-hint');
   form?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const data    = new FormData(/** @type {HTMLFormElement} */ (form));
-    const name    = (data.get('name')    ?? '').toString().trim();
-    const email   = (data.get('email')   ?? '').toString().trim();
+    const data = new FormData(form);
+    const topic = (data.get('topic') ?? '').toString();
+    const name = (data.get('name') ?? '').toString().trim();
+    const email = (data.get('email') ?? '').toString().trim();
     const message = (data.get('message') ?? '').toString().trim();
-    if (!name || !email || !message) return;
 
-    const subject = encodeURIComponent(`Message from ${name}`);
-    const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
-    window.location.href = `mailto:ekaratzaferis@gmail.com?subject=${subject}&body=${body}`;
+    if (!name || !email || !message) {
+      if (hint) {
+        hint.textContent = 'Name, email and a few words of brief, please.';
+        hint.classList.add('error');
+      }
+      return;
+    }
+
+    const subject = encodeURIComponent(`[${topic}] Message from ${name}`);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
   });
 </script>
 
 <style>
-  :global(html),
-  :global(body) {
-    overflow: auto;
-    height: auto;
-  }
-
-  .top-bar {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    height: 3rem;
-    padding: 0 2rem;
-    background: #000;
-    border-bottom: 1px solid #1a1a1a;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  .back-link {
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #888;
-    white-space: nowrap;
-    transition: color 0.25s ease;
-  }
-
-  .back-link:hover {
-    color: #ccc;
-  }
-
-  .header-title {
-    font-family: var(--font-display);
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-primary);
-  }
-
   main {
-    min-height: calc(100dvh - 3rem);
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 8vh, 6rem) 1.25rem 5rem;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  /* ── Intro ───────────────────────────────────────────────────────── */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--m-text-2);
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--m-ok);
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5);
+    animation: pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.45); }
+    70%, 100% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+  }
+
+  .title {
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+    margin: 1.1rem 0 1rem;
+    color: var(--m-text);
+  }
+
+  .sub {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--m-text-2);
+    max-width: 30rem;
+  }
+
+  .fits {
+    list-style: none;
+    margin: 2.25rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .fits li {
+    position: relative;
+    padding-left: 1.6rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--m-text-2);
+  }
+
+  .fits li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--m-accent);
+  }
+
+  .links {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--m-border);
+  }
+
+  .link-row {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 3rem 2rem;
+    gap: 0.75rem;
+    border-bottom: 1px solid var(--m-border);
   }
 
-  .contact-wrap {
-    width: 100%;
-    max-width: 640px;
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
+  .link-row .link {
+    flex: 1;
+    border-bottom: none;
   }
 
-  /* ── Header ───────────────────────────────────────────────── */
-
-  .contact-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .contact-title {
-    font-size: clamp(2.2rem, 6vw, 3.6rem);
-    font-weight: 300;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #f0f0f0;
-  }
-
-  .contact-sub {
-    font-size: 0.97rem;
-    letter-spacing: 0.04em;
-    color: #aaa;
-    line-height: 1.7;
-  }
-
-  /* ── Link cards ────────────────────────────────────────────── */
-
-  .contact-links {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .link-card {
+  .link {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.25rem;
-    background: #080808;
-    border: 1px solid #161616;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: border-color 0.25s ease, transform 0.25s ease;
-    cursor: pointer;
-  }
-
-  .link-card:hover {
-    border-color: #2a2a2a;
-    transform: translateX(4px);
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.95rem 0;
+    border-bottom: 1px solid var(--m-border);
   }
 
   .link-label {
+    font-family: var(--font-mono);
     font-size: 0.72rem;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #666;
+    color: var(--m-text-3);
   }
 
   .link-value {
-    font-size: 0.9rem;
-    letter-spacing: 0.04em;
-    color: #c0c0c0;
-    transition: color 0.25s;
+    font-size: 0.95rem;
+    color: var(--m-text-2);
+    transition: color 0.2s ease;
+    overflow-wrap: anywhere;
+    text-align: right;
   }
 
-  .link-card:hover .link-value {
-    color: #f0f0f0;
+  .link:hover .link-value {
+    color: var(--m-accent);
   }
 
-  /* ── Form ─────────────────────────────────────────────────── */
+  .copy {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--m-text-2);
+    background: var(--m-surface-2);
+    border: 1px solid var(--m-border);
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    min-width: 4.5rem;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
 
-  .contact-form {
+  .copy:hover {
+    color: var(--m-text);
+    border-color: var(--m-border-strong);
+  }
+
+  /* ── Form ────────────────────────────────────────────────────────── */
+  .form-card {
+    background: linear-gradient(180deg, var(--m-surface) 0%, rgba(15, 15, 18, 0.75) 100%);
+    border: 1px solid var(--m-border);
+    border-radius: 20px;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 30px 80px -30px rgba(0, 0, 0, 0.8);
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
+  }
+
+  .topics {
+    border: none;
+  }
+
+  legend,
+  .field label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--m-text-2);
+    margin-bottom: 0.55rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .chip span {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--m-text-2);
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--m-border-strong);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .chip span:hover {
+    color: var(--m-text);
+  }
+
+  .chip input:checked + span {
+    color: #0b0b0b;
+    background: var(--m-text);
+    border-color: var(--m-text);
+  }
+
+  .chip input:focus-visible + span {
+    outline: 2px solid var(--m-accent);
+    outline-offset: 2px;
   }
 
   .form-row {
@@ -212,76 +356,86 @@ import '../styles/global.css';
     gap: 1rem;
   }
 
-  .form-field {
+  .field {
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
-  }
-
-  label {
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #777;
   }
 
   input,
   textarea {
-    background: #080808;
-    border: 1px solid #161616;
-    border-radius: 6px;
-    padding: 0.85rem 1rem;
-    color: #c0c0c0;
-    font-family: 'Roboto Condensed', system-ui, sans-serif;
+    background: var(--m-bg);
+    border: 1px solid var(--m-border);
+    border-radius: 10px;
+    padding: 0.8rem 0.95rem;
+    color: var(--m-text);
+    font-family: var(--font-sans);
     font-size: 0.97rem;
-    letter-spacing: 0.03em;
+    line-height: 1.5;
     outline: none;
-    resize: none;
-    transition: border-color 0.25s ease;
+    resize: vertical;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   input::placeholder,
   textarea::placeholder {
-    color: #444;
+    color: var(--m-text-3);
   }
 
   input:focus,
   textarea:focus {
-    border-color: #303030;
+    border-color: rgba(255, 178, 36, 0.6);
+    box-shadow: 0 0 0 3px var(--m-accent-soft);
   }
 
-  .submit-btn {
-    align-self: flex-start;
-    padding: 0.85rem 2rem;
-    background: transparent;
-    border: 1px solid #252525;
-    border-radius: 6px;
-    color: #bbb;
-    font-family: 'Roboto Condensed', system-ui, sans-serif;
-    font-size: 0.82rem;
-    font-weight: 400;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+  .form-foot {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .submit {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #0b0b0b;
+    background: var(--m-accent);
+    border: none;
+    border-radius: 999px;
+    padding: 0.8rem 1.4rem;
     cursor: pointer;
-    transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
   }
 
-  .submit-btn:hover {
-    border-color: #555;
-    color: #f0f0f0;
-    background: #0d0d0d;
+  .submit:hover {
+    box-shadow: 0 0 0 4px var(--m-accent-soft), 0 8px 30px -6px rgba(255, 178, 36, 0.5);
   }
 
-  /* ── Mobile ───────────────────────────────────────────────── */
+  .submit:active {
+    transform: translateY(1px);
+  }
 
-  @media (max-width: 520px) {
-    .form-row {
+  .hint {
+    font-size: 0.8rem;
+    color: var(--m-text-3);
+  }
+
+  .hint.error {
+    color: var(--m-err);
+  }
+
+  @media (max-width: 860px) {
+    .layout {
       grid-template-columns: 1fr;
     }
+  }
 
-    main {
-      padding: 5rem 1.25rem 3rem;
-      align-items: flex-start;
-    }
+  @media (max-width: 520px) {
+    main { padding: 2rem 1rem 4rem; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot { animation: none; }
   }
 </style>

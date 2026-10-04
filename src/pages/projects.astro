@@ -1,229 +1,343 @@
 ---
 import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import '../styles/global.css';
-
-const projects = [
-  {
-    title: 'flexy',
-    slug: 'flexy',
-    description: 'Three.js library that bends BufferGeometry along Bezier curves — warp any 3D shape to follow a path, stretch or tile it to fill the arc.',
-    tags: ['JavaScript', 'Three.js', 'Open Source'],
-  },
-  {
-    title: 'tess-extrude',
-    slug: 'tess-extrude',
-    description: 'TypeScript library that extrudes 2D polygon outlines into Three.js BufferGeometry using Delaunay tessellation — accepts raw points or SVG paths.',
-    tags: ['TypeScript', 'Three.js', 'WASM', 'Open Source'],
-  },
-  {
-    title: 'four20',
-    slug: 'four20',
-    description: 'Browser-based SVG tracing library — converts raster images and text to clean vector paths with correct winding order for Three.js extrusion.',
-    tags: ['JavaScript', 'SVG', 'Three.js', 'Open Source'],
-  },
-  {
-    title: 'Stannis',
-    slug: 'stannis',
-    description: 'FSM workflow engine for serverless Node.js. Durable, storage-agnostic, zero dependencies.',
-    tags: ['Node.js', 'FSM', 'Serverless', 'Open Source'],
-  },
-  {
-    title: 'Fretboard',
-    slug: 'fretboard',
-    description: 'Personal guitar fretboard visualiser — scales, modes, and chord shapes across the neck. Built with LLMs.',
-    tags: ['Personal', 'Music', 'AI-built'],
-  },
-  {
-    title: 'Dudito',
-    slug: 'dudito',
-    description: 'Personal photography portfolio — travels, events, everyday life. Built with AI on top of Adobe Lightroom URLs.',
-    tags: ['Personal', 'Photography', 'AI-built'],
-  },
-  {
-    title: 'Cloud Terminal',
-    slug: 'fpga',
-    description: 'University thesis — FPGA thin client that replaces desktop hardware by bridging peripherals to a cloud server over Ethernet.',
-    tags: ['FPGA', 'Embedded', 'Networking', 'Thesis'],
-  },
-];
+import { projects, companies } from '../data/projects';
 ---
 
 <Base
+  modern
   title="Projects — Duditeria"
-  description="Open-source projects and experiments by Alexandros Karatzaferis."
+  description="Open-source libraries and experiments by Alexandros Karatzaferis, plus the companies he has worked with."
   canonical="https://duditeria.com/projects"
 >
-  <header class="top-bar fade-in">
-    <a href="/" class="back-link">← Duditeria</a>
-    <span class="header-title">Projects</span>
-  </header>
+  <SiteHeader current="projects" />
 
   <main>
-    <header class="page-header fade-in">
-      <h1>Projects</h1>
-      <p class="subtitle">Things I've built and shipped.</p>
+    <header class="head" data-reveal>
+      <p class="eyebrow eyebrow-accent">Side projects</p>
+      <h1>Things I build to understand how they work.</h1>
+      <p class="sub">The day job is delivering systems. These are where I go deep: 3D geometry, tracing, workflow engines and hardware. Each one has a live demo.</p>
     </header>
 
-    {projects.length === 0 ? (
-      <p class="empty fade-in-delay">More coming soon.</p>
-    ) : (
-      <div class="grid fade-in-delay">
-        {projects.map((project) => (
-          <a href={`/projects/${project.slug}`} class="card">
-            <div class="card-inner">
-              <h2 class="card-title">{project.title}</h2>
-              <p class="card-desc">{project.description}</p>
-              <ul class="card-tags" aria-label="Technologies">
-                {project.tags.map((tag: string) => (
-                  <li>{tag}</li>
-                ))}
+    <ul class="grid">
+      {projects.map((p, i) => (
+        <li data-reveal style={`--d:${i}`}>
+          <a href={`/projects/${p.slug}`} class="card">
+            <div class="thumb">
+              <img src={`/thumbs/${p.slug}.jpg`} alt="" loading={i < 3 ? 'eager' : 'lazy'} width="800" height="500" />
+            </div>
+            <div class="body">
+              <div class="row">
+                <h2 class="title">{p.title}</h2>
+                <span class="arrow" aria-hidden="true">→</span>
+              </div>
+              <p class="desc">{p.description}</p>
+              <ul class="tags" aria-label="Stack">
+                {p.stack.map((s) => <li>{s}</li>)}
               </ul>
             </div>
           </a>
-        ))}
+        </li>
+      ))}
+      <li data-reveal style={`--d:${projects.length}`}>
+        <a href="https://github.com/ekaratzaferis" target="_blank" rel="noopener noreferrer" class="card more">
+          <span class="eyebrow">Open source</span>
+          <span class="more-title">More on GitHub <span class="arrow" aria-hidden="true">↗</span></span>
+          <span class="desc">Smaller experiments, forks and work in progress.</span>
+        </a>
+      </li>
+    </ul>
+
+    <section class="work" aria-labelledby="work-title">
+      <div class="work-head" data-reveal>
+        <p class="eyebrow eyebrow-accent">Where I've worked</p>
+        <h2 id="work-title">The day job.</h2>
       </div>
-    )}
+      <ul class="companies">
+        {companies.map((c, i) => (
+          <li data-reveal style={`--d:${i}`}>
+            <a href={c.url} target="_blank" rel="noopener noreferrer" class="company">
+              <span class="period">{c.period}</span>
+              <span class="name">{c.name}</span>
+              <span class="role">{c.role}</span>
+              <span class="note">{c.note}</span>
+              <span class="visit">{c.url.replace('https://', '')} <span aria-hidden="true">↗</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/resume" class="resume-link" data-reveal>Full story on the resume <span aria-hidden="true">→</span></a>
+    </section>
   </main>
 </Base>
 
+<script>
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+</script>
+
 <style>
-  :global(html),
-  :global(body) {
-    overflow-y: auto !important;
-    height: auto !important;
-  }
-
   main {
-    position: relative;
-    z-index: 1;
-    min-height: calc(100dvh - 3rem);
-    max-width: 960px;
+    max-width: 1160px;
     margin: 0 auto;
-    padding: 3rem 2rem 4rem;
+    padding: clamp(3rem, 9vh, 6rem) 1.25rem 6rem;
   }
 
-  .page-header {
+  .head {
+    max-width: 44rem;
     margin-bottom: 3rem;
   }
 
   h1 {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    font-weight: 300;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--text-primary);
+    font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.04;
+    margin: 0.9rem 0 1.1rem;
+    text-wrap: balance;
   }
 
-  .subtitle {
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
+  .sub {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--m-text-2);
   }
 
-  .empty {
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-  }
-
+  /* ── Projects ────────────────────────────────────────────────────── */
   .grid {
+    list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
   }
 
   .card {
-    display: block;
-    background: #0c0c0c;
-    border: 1px solid #1a1a1a;
-    border-radius: 4px;
-    transition: border-color 0.25s ease, background 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid var(--m-border);
+    border-radius: 18px;
+    background: var(--m-surface);
+    overflow: hidden;
+    transition: border-color 0.25s ease, transform 0.25s ease;
   }
 
   .card:hover {
-    border-color: #333;
-    background: #111;
+    border-color: var(--m-border-strong);
+    transform: translateY(-3px);
   }
 
-  .card-inner {
-    padding: 1.75rem;
+  .thumb {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--m-bg);
+    border-bottom: 1px solid var(--m-border);
+  }
+
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  .card:hover .thumb img {
+    transform: scale(1.04);
+  }
+
+  .body {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
+    padding: 1.25rem 1.35rem 1.4rem;
+    flex: 1;
   }
 
-  .card-title {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-primary);
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
   }
 
-  .card-desc {
-    font-size: 0.82rem;
-    line-height: 1.6;
-    color: var(--text-muted);
+  .title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
-  .card-tags {
+  .arrow {
+    color: var(--m-text-3);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .card:hover .arrow {
+    color: var(--m-accent);
+    transform: translateX(3px);
+  }
+
+  .desc {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--m-text-2);
+    flex: 1;
+  }
+
+  .tags {
+    list-style: none;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 6px;
+    margin-top: 0.4rem;
+  }
+
+  .tags li {
+    font-size: 0.75rem;
+    color: var(--m-text-2);
+    border: 1px solid var(--m-border);
+    border-radius: 999px;
+    padding: 0.2rem 0.55rem;
+  }
+
+  .more {
+    justify-content: flex-end;
+    gap: 0.6rem;
+    padding: 1.5rem;
+    min-height: 220px;
+    background:
+      radial-gradient(90% 120% at 100% 0%, var(--m-accent-soft), transparent 60%),
+      var(--m-surface);
+  }
+
+  .more-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--m-text);
+  }
+
+  .more .desc {
+    flex: 0;
+  }
+
+  .card.more:hover .arrow {
+    transform: translate(3px, -3px);
+  }
+
+  /* ── Companies ───────────────────────────────────────────────────── */
+  .work {
+    margin-top: clamp(4rem, 10vw, 7rem);
+    padding-top: clamp(3rem, 6vw, 4rem);
+    border-top: 1px solid var(--m-border);
+  }
+
+  .work-head {
+    margin-bottom: 2rem;
+  }
+
+  .work-head h2 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    margin-top: 0.75rem;
+  }
+
+  .companies {
     list-style: none;
-    margin-top: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
   }
 
-  .card-tags li {
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #555;
-    border: 1px solid #222;
-    border-radius: 2px;
-    padding: 0.2rem 0.5rem;
-  }
-
-  .top-bar {
+  .company {
     display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    height: 3rem;
-    padding: 0 2rem;
-    background: #000;
-    border-bottom: 1px solid #1a1a1a;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    flex-direction: column;
+    gap: 0.35rem;
+    height: 100%;
+    padding: 1.5rem;
+    border: 1px solid var(--m-border);
+    border-radius: 18px;
+    background: linear-gradient(180deg, var(--m-surface), rgba(15, 15, 18, 0.6));
+    transition: border-color 0.25s ease;
   }
 
-  .back-link {
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #888;
-    white-space: nowrap;
-    transition: color 0.25s ease;
+  .company:hover {
+    border-color: var(--m-border-strong);
   }
 
-  .back-link:hover {
-    color: #ccc;
+  .period {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--m-text-3);
+    margin-bottom: 1.5rem;
   }
 
-  .header-title {
-    font-family: var(--font-display);
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-primary);
+  .name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--m-text);
+    overflow-wrap: anywhere;
+  }
+
+  .role {
+    font-size: 0.9rem;
+    color: var(--m-accent);
+  }
+
+  .note {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--m-text-2);
+    margin-top: 0.5rem;
+    flex: 1;
+  }
+
+  .visit {
+    margin-top: 1.25rem;
+    font-size: 0.85rem;
+    color: var(--m-text-2);
+    transition: color 0.2s ease;
+  }
+
+  .company:hover .visit {
+    color: var(--m-accent);
+  }
+
+  .resume-link {
+    display: inline-block;
+    margin-top: 1.75rem;
+    font-size: 0.95rem;
+    color: var(--m-text);
+    border-bottom: 1px solid var(--m-border-strong);
+    padding-bottom: 0.2rem;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .resume-link:hover {
+    color: var(--m-accent);
+    border-color: var(--m-accent);
+  }
+
+  @media (max-width: 860px) {
+    .companies {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 520px) {
-    main {
-      padding: 2.5rem 1.25rem 3rem;
-    }
+    main { padding: 2.5rem 1rem 4rem; }
+    .grid { grid-template-columns: 1fr; }
   }
 </style>

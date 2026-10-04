@@ -10,14 +10,10 @@
   if (canvas) {
     try {
       const dispose = initStannisEngine(canvas);
-      window.addEventListener('beforeunload', dispose, { once: true });
+      window.addEventListener('pagehide', dispose, { once: true });
     } catch (err) {
       console.error('[stannis-engine] init failed:', err);
-      document.body.style.background = '#800000';
     }
-  } else {
-    console.error('[stannis-engine] canvas not found');
-    document.body.style.background = '#000080';
   }
 </script>
 
@@ -27,7 +23,6 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
     display: block;
     touch-action: pan-y;
   }

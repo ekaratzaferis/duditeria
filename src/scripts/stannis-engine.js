@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { createSceneLabels } from './scene-labels.js';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -169,19 +170,20 @@ export function initStannisEngine(canvas) {
   // ── Renderer ────────────────────────────────────────────────────────────────
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
   // ── Scene & fog ───────────────────────────────────────────────────────────
-  // Limbo approach: bright grey fog IS the light source.
-  // Near objects stay dark (their material colour), far objects fade to grey mist.
-  const FOG_COLOR = 0xa0a0a0;
+  // Dark stage: the workflow fades into the page background at the edges,
+  // and the data packets are the brightest thing in the scene.
+  const FOG_COLOR = 0x08080a;
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(FOG_COLOR);
-  scene.fog = new THREE.FogExp2(FOG_COLOR, 0.018);
+  scene.fog = new THREE.FogExp2(FOG_COLOR, 0.02);
 
   // ── Camera — steep angle, no horizon visible ──────────────────────────────
   const camera = new THREE.PerspectiveCamera(
-    62, window.innerWidth / window.innerHeight, 0.1, 80,
+    62, canvas.clientWidth / canvas.clientHeight, 0.1, 80,
   );
 
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
@@ -201,16 +203,16 @@ export function initStannisEngine(canvas) {
 
   // ── Lighting ──────────────────────────────────────────────────────────────
   // Strong ambient so dark objects still read with 3-D shading, not as blobs.
-  scene.add(new THREE.AmbientLight(0xffffff, 1.4));
+  scene.add(new THREE.HemisphereLight(0xb8c0ff, 0x101014, 1.1));
   // Single directional from above-front — tops and front faces get highlight.
-  const sun = new THREE.DirectionalLight(0xffffff, 1.0);
+  const sun = new THREE.DirectionalLight(0xffffff, 1.6);
   sun.position.set(4, 14, 8);
   sun.target.position.set(0, 0, 0);
   scene.add(sun, sun.target);
 
 
   // ── Conveyor belts — seamless ribbon geometry ─────────────────────────────
-  const beltMat = new THREE.MeshBasicMaterial({ color: 0x3a3a3a, side: THREE.DoubleSide });
+  const beltMat = new THREE.MeshBasicMaterial({ color: 0x2e2e38, side: THREE.DoubleSide });
   toDispose.push(beltMat);
 
   function makeRibbon(pts, width, y = 0.06) {
@@ -274,17 +276,17 @@ export function initStannisEngine(canvas) {
 
   // ── Materials shared by nodes ─────────────────────────────────────────────
   const solidMat = new THREE.MeshStandardMaterial({
-    color: 0x181818, roughness: 0.85, metalness: 0.1,
+    color: 0x4a4a56, roughness: 0.5, metalness: 0.3,
   });
   const glassMat = new THREE.MeshStandardMaterial({
-    color: 0x888888, transparent: true, opacity: 0.12,
+    color: 0x9aa0c0, transparent: true, opacity: 0.09,
     roughness: 0.0, metalness: 0.1,
     side: THREE.DoubleSide, depthWrite: false,
   });
   toDispose.push(solidMat, glassMat);
 
   // Shared edge-line material — clean outlines, no diagonal wireframe mess
-  const edgeMat = new THREE.LineBasicMaterial({ color: 0x555555 });
+  const edgeMat = new THREE.LineBasicMaterial({ color: 0x8a8a9a });
   toDispose.push(edgeMat);
 
   function addEdges(geo, position, rotation) {
@@ -371,7 +373,7 @@ export function initStannisEngine(canvas) {
   const BOX_POOL = 50;
   const boxGeo = new THREE.BoxGeometry(0.20, 0.20, 0.20);
   const boxMat = new THREE.MeshStandardMaterial({
-    color: 0xffffff, roughness: 0.5, metalness: 0.1,
+    color: 0xffb224, emissive: 0xff8a00, emissiveIntensity: 1.1, roughness: 0.4, metalness: 0.1,
   });
   toDispose.push(boxGeo, boxMat);
 
@@ -393,7 +395,7 @@ export function initStannisEngine(canvas) {
   });
 
   // Race state — 3 competitor slots. Index 0 = winner (white), rest = losers (dark).
-  const raceLoserMat = new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.9 });
+  const raceLoserMat = new THREE.MeshStandardMaterial({ color: 0x4a4a55, roughness: 0.8 });
   toDispose.push(raceLoserMat);
   const raceComps = Array.from({ length: 3 }, (_, i) => {
     const m = new THREE.Mesh(boxGeo, i === 0 ? boxMat : raceLoserMat);
@@ -451,11 +453,20 @@ export function initStannisEngine(canvas) {
   dGeo.setAttribute('position', new THREE.BufferAttribute(dPos, 3));
   const circleTex = makeCircleTexture();
   const dMat = new THREE.PointsMaterial({
-    color: 0x888888, size: 0.05, sizeAttenuation: true,
+    color: 0x8a7a5a, size: 0.05, sizeAttenuation: true,
     map: circleTex, transparent: true, alphaTest: 0.001, opacity: 0.4,
   });
   scene.add(new THREE.Points(dGeo, dMat));
   toDispose.push(dGeo, dMat, circleTex);
+
+  // ── Labels naming each node type ──────────────────────────────────────────
+  const labels = createSceneLabels(canvas.parentElement, camera, [
+    { text: 'Task', position: new THREE.Vector3(P.entry.x, 0.7, P.entry.z) },
+    { text: 'Parallel', position: new THREE.Vector3(P.split.x, 0.7, P.split.z) },
+    { text: 'Sequence', position: new THREE.Vector3(-3.9, 0.95, -2.8 - 0.7) },
+    { text: 'Decision', position: new THREE.Vector3(P.dec1.x, 0.9, P.dec1.z) },
+    { text: 'Race', position: new THREE.Vector3(P.race.x, 1.05, P.race.z - 1.2) },
+  ]);
 
   // ── Spawn & decision timers ───────────────────────────────────────────────
   let spawnTimer = 0;
@@ -651,25 +662,28 @@ export function initStannisEngine(canvas) {
     }
     dGeo.attributes.position.needsUpdate = true;
 
-    // Slowly rotate decision diamonds
-
     renderer.render(scene, camera);
+    labels.update();
   }
 
   rafId = requestAnimationFrame(t0 => { lastTime = t0; rafId = requestAnimationFrame(tick); });
 
   // ── Resize ────────────────────────────────────────────────────────────────
   function onResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(w, h, false);
   }
-  window.addEventListener('resize', onResize);
+  const ro = new ResizeObserver(onResize);
+  ro.observe(canvas);
 
   // ── Dispose ───────────────────────────────────────────────────────────────
   return function dispose() {
     cancelAnimationFrame(rafId);
-    window.removeEventListener('resize', onResize);
+    ro.disconnect();
+    labels.dispose();
     for (const o of toDispose) o.dispose();
     renderer.dispose();
   };

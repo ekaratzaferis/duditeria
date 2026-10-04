@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { createSceneLabels } from './scene-labels.js';
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
@@ -64,20 +65,21 @@ export function initFpgaEngine(canvas) {
   // ── renderer ─────────────────────────────────────────────────────────────────
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping      = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.8;
 
   // ── scene ─────────────────────────────────────────────────────────────────────
   const scene = new THREE.Scene();
-  const BG    = 0x122212;
+  // Matte-black PCB: gold traces and the glowing parts carry the scene
+  const BG    = 0x0a0e0b;
   scene.background = new THREE.Color(BG);
-  scene.fog        = new THREE.FogExp2(BG, 0.055);
+  scene.fog        = new THREE.FogExp2(BG, 0.06);
 
   // ── camera ────────────────────────────────────────────────────────────────────
   const camera = new THREE.PerspectiveCamera(
-    52, window.innerWidth / window.innerHeight, 0.1, 120,
+    52, canvas.clientWidth / canvas.clientHeight, 0.1, 120,
   );
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
   if (isMobile) {
@@ -89,7 +91,7 @@ export function initFpgaEngine(canvas) {
   }
 
   // ── lights ────────────────────────────────────────────────────────────────────
-  scene.add(new THREE.AmbientLight(0x2a402a, 8.0));
+  scene.add(new THREE.AmbientLight(0x34403a, 6.0));
 
   const keyLight = new THREE.DirectionalLight(0xffeedd, 2.0);
   keyLight.position.set(2, 14, 6);
@@ -162,6 +164,14 @@ export function initFpgaEngine(canvas) {
   const MX =  3,  MZ =  0;  // monitor (next to keyboard/mouse)
   const KX =  2.8,  KZ = 1.8;   // keyboard
   const MSX = 4.5,  MSZ = 1.5;  // mouse
+
+  const labels = createSceneLabels(canvas.parentElement, camera, [
+    { text: 'Cloud server', position: new THREE.Vector3(-5.2, 3.2, -4.5) },
+    { text: 'Ethernet', position: new THREE.Vector3(FX, 0.35, -2.2) },
+    { text: 'FPGA', position: new THREE.Vector3(FX, 0.75, FZ) },
+    { text: 'Display', position: new THREE.Vector3(MX, 2.1, MZ) },
+    { text: 'Keyboard & mouse', position: new THREE.Vector3(KX + 0.6, 0.55, KZ + 0.4) },
+  ]);
 
   // ── Bundle A: Server → FPGA (5 parallel traces)
   // Route: horizontal (X-axis) to turn, then vertical (Z-axis) to FPGA
@@ -648,20 +658,25 @@ export function initFpgaEngine(canvas) {
     dGeo.attributes.position.needsUpdate = true;
 
     renderer.render(scene, camera);
+    labels.update();
   }
 
   rafId = requestAnimationFrame(t0 => { lastTime = t0; rafId = requestAnimationFrame(tick); });
 
   function onResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(w, h, false);
   }
-  window.addEventListener('resize', onResize);
+  const ro = new ResizeObserver(onResize);
+  ro.observe(canvas);
 
   return function dispose() {
     cancelAnimationFrame(rafId);
-    window.removeEventListener('resize', onResize);
+    ro.disconnect();
+    labels.dispose();
     for (const o of toDispose) o.dispose();
     renderer.dispose();
   };

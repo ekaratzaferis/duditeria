@@ -1,35 +1,56 @@
 ---
 import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import '../styles/global.css';
+
+const sections = [
+  { id: 'overview', title: 'Overview' },
+  { id: 'information', title: 'Information We Handle' },
+  { id: 'use', title: 'How and Why We Use Your Data' },
+  { id: 'sharing', title: 'Third-Party Sharing' },
+  { id: 'retention', title: 'Data Retention' },
+  { id: 'rights', title: 'Your Rights' },
+  { id: 'contact', title: 'Contact Us' },
+];
 ---
 
 <Base
+  modern
   title="Privacy Policy — Duditeria"
   description="Privacy Policy for Duditeria — how we handle personal data for invoicing and payment processing."
   canonical="https://duditeria.com/policy"
 >
-  <header class="top-bar fade-in">
-    <a href="/" class="back-link">← Duditeria</a>
-    <span class="header-title">Privacy Policy</span>
-  </header>
+  <SiteHeader />
 
   <main>
-    <div class="policy-wrap fade-in">
+    <header class="head">
+      <p class="eyebrow eyebrow-accent">Legal</p>
+      <h1>Privacy Policy</h1>
+      <p class="meta">Duditeria · Last Updated: May 2026</p>
+      <p class="summary">
+        <span class="summary-dot" aria-hidden="true"></span>
+        No tracking, no marketing emails, no marketing database. Only what's needed to invoice and get paid.
+      </p>
+    </header>
 
-      <header class="policy-header">
-        <h1 class="policy-title">Privacy Policy</h1>
-        <p class="policy-meta">Duditeria &mdash; Last Updated: May 2026</p>
-      </header>
+    <div class="layout">
+      <nav class="toc" aria-label="On this page">
+        <p class="toc-label">On this page</p>
+        <ol>
+          {sections.map((s, i) => (
+            <li><a href={`#${s.id}`}><span>{String(i + 1).padStart(2, '0')}</span>{s.title}</a></li>
+          ))}
+        </ol>
+      </nav>
 
-      <div class="policy-body">
-
-        <section class="policy-section">
-          <h2>1. Overview</h2>
+      <article class="body">
+        <section id="overview">
+          <h2><span>01</span>Overview</h2>
           <p>This Privacy Policy explains how we handle personal data. We operate on a strict data-minimization principle: we do not track visitors, we do not send marketing emails, and we do not maintain a marketing database. We only handle the bare minimum data required to issue legal invoices and process payments for services rendered.</p>
         </section>
 
-        <section class="policy-section">
-          <h2>2. Information We Handle</h2>
+        <section id="information">
+          <h2><span>02</span>Information We Handle</h2>
           <p>When you engage our services or make a payment via PayPal or bank transfer, we receive the following information:</p>
           <ul>
             <li>Your name or business name</li>
@@ -38,203 +59,269 @@ import '../styles/global.css';
           </ul>
         </section>
 
-        <section class="policy-section">
-          <h2>3. How and Why We Use Your Data</h2>
+        <section id="use">
+          <h2><span>03</span>How and Why We Use Your Data</h2>
           <p>We use this data strictly for two lawful reasons:</p>
           <ul>
-            <li><span class="term">Contractual Obligation:</span> To fulfill the services you hired us to perform.</li>
-            <li><span class="term">Legal &amp; Tax Compliance:</span> To generate valid business invoices and comply with local tax reporting authorities.</li>
+            <li><strong>Contractual Obligation:</strong> To fulfill the services you hired us to perform.</li>
+            <li><strong>Legal &amp; Tax Compliance:</strong> To generate valid business invoices and comply with local tax reporting authorities.</li>
           </ul>
         </section>
 
-        <section class="policy-section">
-          <h2>4. Third-Party Sharing</h2>
+        <section id="sharing">
+          <h2><span>04</span>Third-Party Sharing</h2>
           <p>We do not sell, rent, or trade your personal information. Your data is only processed by trusted infrastructure partners necessary to complete our business transactions:</p>
           <ul>
-            <li><span class="term">PayPal:</span> Our secure payment gateway which handles payment execution.</li>
-            <li><span class="term">Banking Institutions:</span> For processing direct bank transfer payments.</li>
-            <li><span class="term">Tax Authorities &amp; Accountants:</span> For standard legal auditing and tax filing.</li>
+            <li><strong>PayPal:</strong> Our secure payment gateway which handles payment execution.</li>
+            <li><strong>Banking Institutions:</strong> For processing direct bank transfer payments.</li>
+            <li><strong>Tax Authorities &amp; Accountants:</strong> For standard legal auditing and tax filing.</li>
           </ul>
         </section>
 
-        <section class="policy-section">
-          <h2>5. Data Retention</h2>
+        <section id="retention">
+          <h2><span>05</span>Data Retention</h2>
           <p>Because we do not maintain customer databases, your data is only retained within our finalized business invoices, email records, and payment receipts. We hold these records only for the duration required by local tax laws (typically 5 to 7 years, depending on jurisdiction), after which they are securely deleted.</p>
         </section>
 
-        <section class="policy-section">
-          <h2>6. Your Rights</h2>
+        <section id="rights">
+          <h2><span>06</span>Your Rights</h2>
           <p>Depending on your location, you have the right to access the personal data we hold about you or request its deletion (provided it does not conflict with our legal tax-retention obligations).</p>
         </section>
 
-        <section class="policy-section">
-          <h2>7. Contact Us</h2>
+        <section id="contact">
+          <h2><span>07</span>Contact Us</h2>
           <p>For any privacy-related questions, you can reach us at:</p>
-          <p class="contact-line">Email: <a href="mailto:ekaratzaferis@gmail.com">ekaratzaferis@gmail.com</a></p>
+          <a href="mailto:ekaratzaferis@gmail.com" class="mail">
+            <span class="mail-label">Email</span>
+            <span class="mail-value">ekaratzaferis@gmail.com</span>
+          </a>
         </section>
-
-      </div>
+      </article>
     </div>
   </main>
 </Base>
 
 <style>
-  .top-bar {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    height: 3rem;
-    padding: 0 2rem;
-    background: #000;
-    border-bottom: 1px solid #1a1a1a;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  .back-link {
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #888;
-    white-space: nowrap;
-    transition: color 0.25s ease;
-  }
-
-  .back-link:hover {
-    color: #ccc;
-  }
-
-  .header-title {
-    font-family: var(--font-display);
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-primary);
-  }
-
   main {
-    height: calc(100dvh - 3rem);
-    overflow-y: auto;
-    display: flex;
-    justify-content: center;
-    padding: 4rem 2rem 6rem;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: clamp(3rem, 9vh, 6rem) 1.25rem 6rem;
   }
 
-  .policy-wrap {
-    width: 100%;
-    max-width: 680px;
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
+  /* ── Header ──────────────────────────────────────────────────────── */
+  .head {
+    max-width: 44rem;
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
   }
 
-  /* ── Header ───────────────────────────────────────────────── */
-
-  .policy-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin: 0.9rem 0 0.8rem;
   }
 
-  .policy-title {
-    font-size: clamp(2.2rem, 6vw, 3.6rem);
-    font-weight: 300;
-    letter-spacing: 0.12em;
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--m-text-3);
+  }
+
+  .summary {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+    margin-top: 1.75rem;
+    padding: 1rem 1.15rem;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: var(--m-text);
+    border: 1px solid var(--m-border);
+    border-radius: 14px;
+    background:
+      radial-gradient(80% 140% at 0% 0%, var(--m-accent-soft), transparent 60%),
+      var(--m-surface);
+  }
+
+  .summary-dot {
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--m-ok);
+    transform: translateY(-1px);
+  }
+
+  /* ── Layout ──────────────────────────────────────────────────────── */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: clamp(2rem, 6vw, 5rem);
+  }
+
+  .toc {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+  }
+
+  .toc-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #f0f0f0;
+    color: var(--m-text-3);
+    margin-bottom: 0.8rem;
   }
 
-  .policy-meta {
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #555;
-  }
-
-  /* ── Body ─────────────────────────────────────────────────── */
-
-  .policy-body {
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-  }
-
-  .policy-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-    padding-bottom: 2.5rem;
-    border-bottom: 1px solid #111;
-  }
-
-  .policy-section:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-
-  h2 {
-    font-size: 0.72rem;
-    font-weight: 400;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: #666;
-  }
-
-  p {
-    font-size: 0.97rem;
-    letter-spacing: 0.03em;
-    color: #aaa;
-    line-height: 1.85;
-  }
-
-  ul {
+  .toc ol {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
-    padding-left: 0;
+    border-left: 1px solid var(--m-border);
   }
 
-  li {
-    font-size: 0.97rem;
-    letter-spacing: 0.03em;
-    color: #aaa;
-    line-height: 1.7;
-    padding-left: 1.2rem;
+  .toc a {
+    display: flex;
+    gap: 0.65rem;
+    padding: 0.4rem 0 0.4rem 1rem;
+    margin-left: -1px;
+    border-left: 1px solid transparent;
+    font-size: 0.88rem;
+    color: var(--m-text-2);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .toc a span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--m-text-3);
+    padding-top: 0.12rem;
+  }
+
+  .toc a:hover {
+    color: var(--m-text);
+    border-left-color: var(--m-accent);
+  }
+
+  /* ── Body ────────────────────────────────────────────────────────── */
+  .body {
+    max-width: 44rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  section {
+    padding: 2rem 0;
+    border-top: 1px solid var(--m-border);
+    scroll-margin-top: 5rem;
+  }
+
+  section:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--m-text);
+    margin-bottom: 0.9rem;
+  }
+
+  h2 span {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--m-accent);
+  }
+
+  .body p {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--m-text-2);
+  }
+
+  .body ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .body li {
     position: relative;
+    padding-left: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--m-text-2);
   }
 
-  li::before {
-    content: '—';
+  .body li::before {
+    content: '→';
     position: absolute;
     left: 0;
-    color: #333;
+    color: var(--m-accent);
   }
 
-  .term {
-    color: #c0c0c0;
-    font-weight: 400;
+  strong {
+    font-weight: 500;
+    color: var(--m-text);
   }
 
-  .contact-line {
-    color: #aaa;
+  .mail {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--m-border);
+    border-radius: 12px;
+    background: var(--m-surface);
+    transition: border-color 0.2s ease;
   }
 
-  .contact-line a {
-    color: #c0c0c0;
-    transition: color 0.25s ease;
+  .mail:hover {
+    border-color: var(--m-border-strong);
   }
 
-  .contact-line a:hover {
-    color: #f0f0f0;
+  .mail-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--m-text-3);
   }
 
-  /* ── Mobile ───────────────────────────────────────────────── */
+  .mail-value {
+    color: var(--m-text);
+    overflow-wrap: anywhere;
+    transition: color 0.2s ease;
+  }
+
+  .mail:hover .mail-value {
+    color: var(--m-accent);
+  }
+
+  @media (max-width: 860px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    .toc {
+      position: static;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--m-border);
+    }
+  }
 
   @media (max-width: 520px) {
-    main {
-      padding: 3rem 1.25rem 5rem;
-    }
+    main { padding: 2.5rem 1rem 4rem; }
   }
 </style>

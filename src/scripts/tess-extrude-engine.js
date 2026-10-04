@@ -7,19 +7,19 @@ export function initTessExtrudeEngine(canvas) {
   // ── renderer ──────────────────────────────────────────────────────────
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
   // ── scene ─────────────────────────────────────────────────────────────
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x050505);
+  scene.background = new THREE.Color(0x08080a);
 
   // ── camera ────────────────────────────────────────────────────────────
   // Placed directly above, pointing straight down — like a light bulb over a table.
   // camera.up must be set before lookAt to avoid gimbal lock.
   const camera = new THREE.PerspectiveCamera(
     50,
-    window.innerWidth / window.innerHeight,
+    canvas.clientWidth / canvas.clientHeight,
     0.1,
     2000,
   );
@@ -113,15 +113,18 @@ export function initTessExtrudeEngine(canvas) {
 
   // ── resize ────────────────────────────────────────────────────────────
   function onResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(w, h, false);
     renderer.render(scene, camera);
   }
-  window.addEventListener('resize', onResize);
+  const ro = new ResizeObserver(onResize);
+  ro.observe(canvas);
 
   return function dispose() {
-    window.removeEventListener('resize', onResize);
+    ro.disconnect();
     for (const o of toDispose) o.dispose();
     renderer.dispose();
   };
